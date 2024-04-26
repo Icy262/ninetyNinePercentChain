@@ -25,6 +25,7 @@ public class Block {
         } catch (Exception e) {
         }
         blockAsByteArray.write(nonce);
+        return blockAsByteArray.toByteArray();
     }
     public byte[] hashBlock() {
     }
