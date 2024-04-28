@@ -6,23 +6,24 @@ import java.io.DataOutputStream;;
 public class Block {
     int index;
     long timestamp;
+    long nonce=0; //index 12-20
     byte[] previousHash=new byte[32];
     ArrayList<Transaction> transactions=new ArrayList<Transaction>();
-    long nonce;
-    byte[] thisblockHash;
+    byte[] thisBlockHash; //For testing purposes only
     public byte[] blockAsByteArray() {
         try {
             ByteArrayOutputStream blockAsByteArray=new ByteArrayOutputStream();
             DataOutputStream longWriter=new DataOutputStream(blockAsByteArray);
             blockAsByteArray.write(index);
             longWriter.writeLong(timestamp);
+            longWriter.writeLong(nonce);
+            longWriter.flush();
             blockAsByteArray.write(previousHash);
             ObjectOutputStream objectToByte=new ObjectOutputStream(blockAsByteArray); 
             for(int i=0; i<transactions.size(); i++) {
                 objectToByte.writeObject(transactions.get(i));
             }
             objectToByte.flush();
-            longWriter.writeLong(nonce);
             return blockAsByteArray.toByteArray();
         } catch(Exception e) {
             System.out.println(e);
@@ -34,11 +35,11 @@ public class Block {
     }
     public static boolean checkHashZeros(byte[] hash, int numZeros) {
         for(int i=0; i<numZeros; i++) {
-            if(((hash[i]>>(i-1)) & 1)==1) {
-                return false;
+            if(((hash[(int)(i/8)]>>(int)(i%8))&1)==1) {
+                return false; //Doesn't have numZeros
             }
         }
-        return true;
+        return true; //Has numZeros
     }
     public Block(int index, long timestamp, byte[] previousHash, ArrayList<Transaction> transactions) {
         this.index=index;
