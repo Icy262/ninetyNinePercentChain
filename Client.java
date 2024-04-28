@@ -15,6 +15,7 @@ public class Client extends Thread {
             ObjectOutputStream test=new ObjectOutputStream(socket.getOutputStream());
             test.writeObject(toSend);
             test.close();
+            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

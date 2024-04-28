@@ -1,7 +1,7 @@
 import java.util.ArrayList;
-import java.security.MessageDigest;
 import java.io.ObjectOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;;
 
 public class Block {
     int index;
@@ -11,25 +11,28 @@ public class Block {
     long nonce;
     byte[] thisblockHash;
     public byte[] blockAsByteArray() {
-        ByteArrayOutputStream blockAsByteArray=new ByteArrayOutputStream();
-        blockAsByteArray.write(index);
-        blockAsByteArray.write(timestamp);
-        blockAsByteArray.write(previousHash);
-        ObjectOutputStream objectToByte=new ObjectOutputStream(blockAsByteArray); 
         try {
+            ByteArrayOutputStream blockAsByteArray=new ByteArrayOutputStream();
+            DataOutputStream longWriter=new DataOutputStream(blockAsByteArray);
+            blockAsByteArray.write(index);
+            longWriter.writeLong(timestamp);
+            blockAsByteArray.write(previousHash);
+            ObjectOutputStream objectToByte=new ObjectOutputStream(blockAsByteArray); 
             for(int i=0; i<transactions.size(); i++) {
                 objectToByte.writeObject(transactions.get(i));
             }
             objectToByte.flush();
-            blockAsByteArray.write();
-        } catch (Exception e) {
+            longWriter.writeLong(nonce);
+            return blockAsByteArray.toByteArray();
+        } catch(Exception e) {
+            System.out.println(e);
+            return null;
         }
-        blockAsByteArray.write(nonce);
-        return blockAsByteArray.toByteArray();
     }
-    public byte[] hashBlock() {
+    public static byte[] hashBlock(byte[] blockAsByteArray) {
+        return SHA256Hash.hash(blockAsByteArray);
     }
-    public boolean checkHashZeros(byte[] hash, int numZeros) {
+    public static boolean checkHashZeros(byte[] hash, int numZeros) {
         for(int i=0; i<numZeros; i++) {
             if(((hash[i]>>(i-1)) & 1)==1) {
                 return false;
