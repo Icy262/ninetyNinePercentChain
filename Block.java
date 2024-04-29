@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.io.ObjectOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;;
+import java.io.DataOutputStream;
 
 public class Block {
     int index;
