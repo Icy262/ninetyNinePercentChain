@@ -3,7 +3,7 @@ import java.io.ObjectOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
-public class Block {
+public class Block implements MerkleTreeable {
 	int index;
 	long timestamp;
 	long nonce=0; //index 12-20
@@ -30,8 +30,8 @@ public class Block {
 			return null;
 		}
 	}
-	public static byte[] hashBlock(byte[] blockAsByteArray) {
-		return SHA256Hash.hash(blockAsByteArray);
+	public byte[] hash() {
+		return SHA256Hash.hash(blockAsByteArray());
 	}
 	public static boolean checkHashZeros(byte[] hash, int numZeros) {
 		for(int i=0; i<numZeros; i++) {
