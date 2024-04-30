@@ -2,14 +2,14 @@ import java.util.ArrayList;
 import java.io.ObjectOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.Serializable;
 
-public class Block implements MerkleTreeable {
+public class Block implements Serializable, MerkleTreeable {
 	int index;
 	long timestamp;
 	long nonce=0; //index 12-20
 	byte[] previousHash=new byte[32];
 	ArrayList<Transaction> transactions=new ArrayList<Transaction>();
-	byte[] thisBlockHash; //For testing purposes only
 	public byte[] blockAsByteArray() {
 		try {
 			ByteArrayOutputStream blockAsByteArray=new ByteArrayOutputStream();
