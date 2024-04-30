@@ -1,3 +1,3 @@
 public class TransactionOut {
-    PublicKey requiredPublicKey;
+	PublicKey requiredPublicKey;
 }

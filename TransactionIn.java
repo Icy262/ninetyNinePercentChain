@@ -1,4 +1,4 @@
 public class TransactionIn {
-    TransactionLocation prevLocation;
-    PublicKey requiredPublicKey;
+	TransactionLocation prevLocation;
+	PublicKey requiredPublicKey;
 }
