@@ -10,7 +10,7 @@ class RegisterDNS extends Thread {
 			Socket socket=new Socket(ip, port);
 			ObjectOutputStream write=new ObjectOutputStream(socket.getOutputStream());
 			write.writeObject(socket.getInetAddress().toString());
-			test.close();
+			write.close();
 			socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();
