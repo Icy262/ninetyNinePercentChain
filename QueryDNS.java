@@ -13,7 +13,7 @@ class QueryDNS extends Thread {
 			for(int i=0; i<10; i++) {
 				ip[i]=(String) read.readObject();
 			}
-			test.close();
+			read.close();
 			socket.close();
 			return ip;
 		} catch (Exception e) {
