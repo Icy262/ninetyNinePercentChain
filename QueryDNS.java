@@ -11,7 +11,7 @@ class QueryDNS extends Thread {
 			Socket serverSocket=new Socket(ip, port);
 			ObjectInputStream read=new ObjectInputStream(socket.getInputStream());
 			for(int i=0; i<10; i++) {
-				ip[i]=(String) test.readObject();
+				ip[i]=(String) read.readObject();
 			}
 			test.close();
 			socket.close();
