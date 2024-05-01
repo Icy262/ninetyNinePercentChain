@@ -1,11 +1,24 @@
 import java.net.Socket;
 import java.lang.Thread;
+import java.net.SocketTimeoutException;
 
 class KeepAlive extends Thread {
-	public void run(String ip) throws SocketTimeoutException {
-		int port=9937;
-		Socket socket=new Socket(ip, port);
-		socket.setSoTimeout(10000);
-		socket.close();
+	private String ip;
+	public void run() {
+		try {
+			int port=9937;
+			Socket socket=new Socket(ip, port);
+			socket.setSoTimeout(10000);
+			socket.close();
+		} catch(Exception e) {
+			if(e instanceof SocketTimeoutException) {
+				//REMOVE FROM LIST OF NODES
+			} else {
+				System.out.println(e);
+			}
+		}
+	}
+	public KeepAlive(String ip) {
+		this.ip=ip;
 	}
 }

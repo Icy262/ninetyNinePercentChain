@@ -1,4 +1,4 @@
-import java.net.ServerSocket;
+import java.net.Socket;
 import java.lang.Thread;
 import java.io.ObjectOutputStream;
 
@@ -7,7 +7,7 @@ class RegisterDNS extends Thread {
 		int port=9937;
 		String DNSIP="ninetyNinePercent.mrman314.tech";
 		try {
-			Socket socket=new Socket(ip, port);
+			Socket socket=new Socket(DNSIP, port);
 			ObjectOutputStream write=new ObjectOutputStream(socket.getOutputStream());
 			write.writeObject(socket.getInetAddress().toString());
 			write.close();
