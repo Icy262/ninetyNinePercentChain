@@ -11,7 +11,7 @@ public class Client extends Thread {
 	}
 	public void runClient(String ip, int port) {
 		try {
-			Socket socket = new Socket(ip, port);
+			Socket socket=new Socket(ip, port);
 			ObjectOutputStream test=new ObjectOutputStream(socket.getOutputStream());
 			test.writeObject(toSend);
 			test.close();
