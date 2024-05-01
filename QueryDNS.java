@@ -8,7 +8,7 @@ class QueryDNS extends Thread {
 		String DNSIP="ninetyNinePercent.mrman314.tech";
 		String[] ip=new String[10];
 		try {
-			Socket serverSocket=new Socket(ip, port);
+			Socket socket=new Socket(ip, port);
 			ObjectInputStream read=new ObjectInputStream(socket.getInputStream());
 			for(int i=0; i<10; i++) {
 				ip[i]=(String) read.readObject();
