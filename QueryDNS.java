@@ -2,7 +2,7 @@ import java.net.ServerSocket;
 import java.lang.Thread;
 import java.io.ObjectInputStream;
 
-class QueryDNS implements Thread {
+class QueryDNS extends Thread {
 	public String[] run() {
 		int port=9937;
 		String DNSIP="ninetyNinePercent.mrman314.tech";
