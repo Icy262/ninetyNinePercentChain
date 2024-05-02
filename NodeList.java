@@ -1,9 +1,11 @@
+import java.util.ArrayList;
+
 class NodeList {
-	private static String[] ip;
+	private static ArrayList<String[]> String[] ip=new ArrayList<String>();
 	public static void setIP(int i, String value) {
-		ip[i]=value;
+		ip.set(i, value);
 	}
 	public static String getIP(int i) {
-		return ip[i];
+		return ip.get(i);
 	}
 }
