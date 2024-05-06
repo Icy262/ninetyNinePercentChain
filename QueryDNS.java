@@ -10,7 +10,7 @@ class QueryDNS extends Thread {
 			Socket socket=new Socket(DNSIP, port);
 			ObjectInputStream read=new ObjectInputStream(socket.getInputStream());
 			for(int i=0; i<10; i++) {
-				NodeList.setIP(i, (String) read.readObject());
+				NodeIP.addIP((String) read.readObject());
 			}
 			read.close();
 			socket.close();
