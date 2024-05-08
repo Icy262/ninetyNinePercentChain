@@ -6,7 +6,7 @@ class KeepAlive extends Thread {
 	private String ip;
 	public void run() {
 		try {
-			int port=9937;
+			int port=9939;
 			Socket socket=new Socket(ip, port);
 			socket.setSoTimeout(10000);
 			socket.close();
