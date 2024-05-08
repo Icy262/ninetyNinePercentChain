@@ -4,11 +4,9 @@ import java.lang.Thread;
 class KeepAliveResponse extends Thread {
 	int port=9939;
 	public void run() {
-		try {
-			ServerSocket serverSocket=new ServerSocket(port);
+		try(ServerSocket serverSocket=new ServerSocket(port);) {
 			while(true) {
-				serverSocket.accept();
-				serverSocket.close();
+				serverSocket.accept().close();
 			}
 		} catch(Exception e) {
 			System.out.println(e);
