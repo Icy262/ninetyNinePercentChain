@@ -1,3 +1,2 @@
-public class TransactionLocation {
-	
+public class TransactionLocation {	
 }
