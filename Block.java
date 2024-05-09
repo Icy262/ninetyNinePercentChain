@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.io.ObjectOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.Serializable;
@@ -9,29 +8,26 @@ public class Block implements Serializable, MerkleTreeable {
 	long timestamp;
 	long nonce=0; //index 12-20
 	byte[] previousHash=new byte[32];
-	ArrayList<Transaction> transactions=new ArrayList<Transaction>();
-	public byte[] blockAsByteArray() {
+	byte[] merkleRoot;
+	ArrayList<Transaction> transactions=new ArrayList<Transaction>(); //Body
+	public byte[] headerAsByteArray() {
 		try {
-			ByteArrayOutputStream blockAsByteArray=new ByteArrayOutputStream();
-			DataOutputStream longWriter=new DataOutputStream(blockAsByteArray);
-			blockAsByteArray.write(index);
+			ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream();
+			DataOutputStream longWriter=new DataOutputStream(headerAsByteArray);
+			headerAsByteArray.write(index);
 			longWriter.writeLong(timestamp);
 			longWriter.writeLong(nonce);
 			longWriter.flush();
-			blockAsByteArray.write(previousHash);
-			ObjectOutputStream objectToByte=new ObjectOutputStream(blockAsByteArray); 
-			for(int i=0; i<transactions.size(); i++) {
-				objectToByte.writeObject(transactions.get(i));
-			}
-			objectToByte.flush();
-			return blockAsByteArray.toByteArray();
+			headerAsByteArray.write(previousHash);
+			headerAsByteArray.write(merkleRoot);
+			return headerAsByteArray.toByteArray();
 		} catch(Exception e) {
 			System.out.println(e);
 			return null;
 		}
 	}
 	public byte[] hash() {
-		return SHA256Hash.hash(blockAsByteArray());
+		return SHA256Hash.hash(headerAsByteArray());
 	}
 	public static boolean checkHashZeros(byte[] hash, int numZeros) {
 		for(int i=0; i<numZeros; i++) {
@@ -40,6 +36,9 @@ public class Block implements Serializable, MerkleTreeable {
 			}
 		}
 		return true; //Has numZeros
+	}
+	public void genMerkleRoot() {
+		merkleRoot=new MerkleTree<Transaction>(transactions).genTree();
 	}
 	public Block(int index, long timestamp, byte[] previousHash, ArrayList<Transaction> transactions) {
 		this.index=index;
