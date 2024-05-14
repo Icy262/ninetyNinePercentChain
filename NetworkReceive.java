@@ -6,7 +6,9 @@ public class NetworkReceive extends Thread {
 	public void run() {
 		try {
 			ObjectInputStream endpointInputStream=new ObjectInputStream(endpoint.getInputStream());
-			NetworkReadQueue.addToQueue(endpointInputStream.readObject());
+			while(true) {
+				NetworkRead.add(endpointInputStream.readObject());
+			}
 		} catch(Exception e) {
 			System.out.println(e);
 		}
