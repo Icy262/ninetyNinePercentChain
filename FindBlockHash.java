@@ -12,6 +12,7 @@ public class FindBlockHash extends Thread {
 			nonce.putLong(12, nonce.getLong(12)+1);
 		} while(!Block.checkHashZeros(SHA256Hash.hash(headerAsByteArray), numZeros));
 		blockToHash.nonce=nonce.getLong(12);
+		FindBlockHashManager.validBlockFound(blockToHash);
 	}
 	public FindBlockHash(Block blockToHash, int numZeros) {
 		this.blockToHash=blockToHash;
