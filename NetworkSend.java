@@ -4,8 +4,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class NetworkSend extends Thread {
-	String ip;
-	ArrayList<Object> sendQueue=new ArrayList<Object>();
+	private String ip;
+	private ArrayList<Object> sendQueue=new ArrayList<Object>();
 	public NetworkSend(String ip) {
 		this.ip=ip;
 	}
@@ -19,6 +19,9 @@ public class NetworkSend extends Thread {
 		} catch(Exception e) {
 			System.out.println(e);
 		}
+	}
+	public String getIP() {
+		return ip;
 	}
 	public void addToQueue(Object toSend) {
 		sendQueue.add(toSend);
