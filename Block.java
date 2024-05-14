@@ -46,4 +46,7 @@ public class Block implements Serializable, MerkleTreeable {
 		this.previousHash=previousHash;
 		this.transactions=transactions;
 	}
+	public void addTransaction(Transaction toAdd) {
+		transactions.add(toAdd);
+	}
 }
