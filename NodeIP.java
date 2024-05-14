@@ -2,17 +2,16 @@ import java.util.ArrayList;
 
 public class NodeIP {
 	private static ArrayList<String> nodeIPs=new ArrayList<String>();
-	static int currentIndex=0;
+	private static int currentIndex=0;
 	public static void addIP(String ip) {
-		for(int i=0; i<nodeIPs.size(); i++) {
-			if(nodeIPs.get(i).equalsIgnoreCase(ip)) {
-				return;
-			}
+		if(!nodeIPs.contains(ip)) {
+			nodeIPs.add(ip);
+			NetworkSendManager.update();
 		}
-		nodeIPs.add(ip);
 	}
 	public static void removeIP(String ip) {
 		nodeIPs.remove(ip);
+		NetworkSendManager.update();
 	}
 	public static String getIP(int index) {
 		return nodeIPs.get(index);
