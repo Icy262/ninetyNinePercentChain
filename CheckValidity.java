@@ -14,6 +14,8 @@ public class CheckValidity {
 			return false;
 		} else if(!Arrays.equals(toCheck.merkleRoot, new MerkleTree<Transaction>(toCheck.transactions).genTree())) {
 			return false;
+		} if(toCheck.index<=0) {
+			return false;
 		}
 		for(int i=0; i<toCheck.transactions.size(); i++) {
 			if(!checkTransaction(toCheck.transactions.get(i))) {
