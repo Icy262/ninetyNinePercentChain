@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 class QueryDNS extends Thread {
 	public void run() {
 		int port=9940;
-		String DNSIP="ninetyNinePercent.mrman314.tech";
+		String DNSIP="10.10.166.222";
 		while(true) {
 			try {
 				Socket socket=new Socket(DNSIP, port);
