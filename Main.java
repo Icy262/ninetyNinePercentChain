@@ -5,5 +5,6 @@ public class Main {
 		new KeepAliveResponse().start();
 		new KeepAliveManager().start();
 		new NetworkReceiveHandler().start();
+		new SyncChainResponseManager().start();
 	}
 }
