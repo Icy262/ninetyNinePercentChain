@@ -15,7 +15,11 @@ class QueryDNS extends Thread {
 				}
 				read.close();
 				socket.close();
-				Thread.sleep(600000);
+				if(NodeIP.getSize()==0) {
+					Thread.sleep(1000);
+				} else {
+					Thread.sleep(600000);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
