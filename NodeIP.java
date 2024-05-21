@@ -7,6 +7,7 @@ public class NodeIP {
 		if(!nodeIPs.contains(ip)) {
 			nodeIPs.add(ip);
 			NetworkSendManager.update();
+			new SyncChain(ip);
 		}
 	}
 	public static void removeIP(String ip) {
