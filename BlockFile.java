@@ -2,6 +2,9 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.File;
 
 class BlockFile {
 	public static Block readBlock(int blockNum) {
@@ -27,5 +30,21 @@ class BlockFile {
 		} catch(Exception e) {
 			System.out.println(e);
 		}
+	}
+	public static boolean blockExists(int index) {
+		try {
+			FileInputStream block=new FileInputStream("./blockchain/"+index+".ser");
+			block.close();
+			return true;
+		} catch(FileNotFoundException e) {
+			return false;
+		} catch(IOException e) {
+			System.out.println(e);
+			return true;
+		}
+	}
+	public static int getHighestIndex() {
+		File directory=new File("./blockchain");
+		return directory.listFiles().length-1;
 	}
 }
