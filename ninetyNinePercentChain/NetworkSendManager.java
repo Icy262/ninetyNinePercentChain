@@ -1,6 +1,7 @@
+package ninetyNinePercentChain;
 import java.util.ArrayList;
 
-public class NetworkSendManager {
+class NetworkSendManager {
 	private static ArrayList<NetworkSend> networkSends;
 	public static void update() {
 		for(int i=0; i<NodeIP.getSize(); i++) {

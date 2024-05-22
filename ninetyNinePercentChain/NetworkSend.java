@@ -1,9 +1,10 @@
+package ninetyNinePercentChain;
 import java.io.ObjectOutputStream;
 import java.lang.Thread;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class NetworkSend extends Thread {
+class NetworkSend extends Thread {
 	private String ip;
 	private ArrayList<Object> sendQueue=new ArrayList<Object>();
 	public NetworkSend(String ip) {

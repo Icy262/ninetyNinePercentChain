@@ -1,6 +1,7 @@
+package ninetyNinePercentChain;
 import java.util.ArrayList;
 
-public class NodeIP {
+class NodeIP {
 	private static ArrayList<String> nodeIPs=new ArrayList<String>();
 	private static int currentIndex=0;
 	public static void addIP(String ip) {

@@ -1,7 +1,8 @@
+package ninetyNinePercentChain;
 import java.util.ArrayList;
 
 class MerkleTree<T extends MerkleTreeable> {
-	ArrayList<byte[]> hash;
+	private ArrayList<byte[]> hash;
 	public byte[] genTree() {
 		while(hash.size()>1) {
 			balanceTree();

@@ -1,6 +1,7 @@
+package ninetyNinePercentChain;
 import java.security.MessageDigest;
 
-public class SHA256Hash {
+class SHA256Hash {
 	public SHA256Hash() {
 	}
 	public static byte[] hash(byte[] toHash) {

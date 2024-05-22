@@ -1,15 +1,16 @@
+package ninetyNinePercentChain;
 import java.util.ArrayList;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.Serializable;
 
-public class Block implements Serializable, MerkleTreeable {
-	int index;
-	long timestamp;
-	long nonce=0; //index 12-20
-	byte[] previousHash=new byte[32];
-	byte[] merkleRoot;
-	ArrayList<Transaction> transactions=new ArrayList<Transaction>(); //Body
+class Block implements Serializable, MerkleTreeable {
+	private int index;
+	private long timestamp;
+	private long nonce=0; //index 12-20
+	private byte[] previousHash=new byte[32];
+	private byte[] merkleRoot;
+	private ArrayList<Transaction> transactions=new ArrayList<Transaction>(); //Body
 	public byte[] headerAsByteArray() {
 		try {
 			ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream();
@@ -48,5 +49,29 @@ public class Block implements Serializable, MerkleTreeable {
 	}
 	public void addTransaction(Transaction toAdd) {
 		transactions.add(toAdd);
+	}
+	public int getIndex() {
+		return index;
+	}
+	public byte[] getMerkleRoot() {
+		return getMerkleRoot();
+	}
+	public Transaction getTransaction(int index) {
+		return transactions.get(index);
+	}
+	public int getNumTransactions() {
+		return transactions.size();
+	}
+	public byte[] getPreviousHash() {
+		return previousHash;
+	}
+	public ArrayList<Transaction> getAllTransactions() {
+		return transactions;
+	}
+	public long getNonce() {
+		return nonce;
+	}
+	public void setNonce(long nonce) {
+		this.nonce = nonce;
 	}
 }

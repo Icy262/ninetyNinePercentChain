@@ -1,8 +1,9 @@
+package ninetyNinePercentChain;
 import java.net.Socket;
 import java.io.ObjectInputStream;
 
-public class NetworkReceive extends Thread {
-	Socket endpoint;
+class NetworkReceive extends Thread {
+	private Socket endpoint;
 	public void run() {
 		try {
 			ObjectInputStream endpointInputStream=new ObjectInputStream(endpoint.getInputStream());

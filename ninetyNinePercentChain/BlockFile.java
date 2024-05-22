@@ -1,3 +1,4 @@
+package ninetyNinePercentChain;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
@@ -22,7 +23,7 @@ class BlockFile {
 	}
 	public static void writeBlock(Block toWrite) {
 		try {
-			FileOutputStream blockFile=new FileOutputStream("./blockchain/"+String.valueOf(toWrite.index)+".ser");
+			FileOutputStream blockFile=new FileOutputStream("./blockchain/"+String.valueOf(toWrite.getIndex())+".ser");
 			ObjectOutputStream blockWriter=new ObjectOutputStream(blockFile);
 			blockWriter.writeObject(toWrite);
 			blockWriter.close();

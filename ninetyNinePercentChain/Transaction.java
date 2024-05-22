@@ -1,15 +1,16 @@
+package ninetyNinePercentChain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
-public class Transaction implements Serializable, MerkleTreeable {
-	TransactionIn[] TIN; //Not in header
-	TransactionOut[] TOUT; //Not in header
-	byte[] merkleRoot; //Header
-	long timestamp=System.currentTimeMillis(); //Header
-	byte[][] signature; //Not in header. Contains the merkle root signed by each of the TIN private keys.
+class Transaction implements Serializable, MerkleTreeable {
+	private TransactionIn[] TIN; //Not in header
+	private TransactionOut[] TOUT; //Not in header
+	private byte[] merkleRoot; //Header
+	private long timestamp=System.currentTimeMillis(); //Header
+	private byte[][] signature; //Not in header. Contains the merkle root signed by each of the TIN private keys.
 
 	public Transaction(TransactionIn[] TIN, TransactionOut[] TOUT, long timestamp) {
 		this.TIN=TIN;
@@ -42,7 +43,34 @@ public class Transaction implements Serializable, MerkleTreeable {
 			System.out.println(e);
 		}
 	}
-	public void genMerkleRoot() {
+	private void genMerkleRoot() {
 		merkleRoot=ByteArray.merge(new MerkleTree<TransactionIn>(new ArrayList<TransactionIn>(Arrays.asList(TIN))).genTree(), new MerkleTree<TransactionOut>(new ArrayList<TransactionOut>(Arrays.asList(TOUT))).genTree());
+	}
+	public byte[] getMerkleRoot() {
+		return merkleRoot;
+	}
+	public byte[] getSignature(int index) {
+		return signature[index];
+	}
+	public TransactionIn getTransactionIn(int index) {
+		return TIN[index];
+	}
+	public TransactionOut getTransactionOut(int index) {
+		return TOUT[index];
+	}
+	public int getTINLength() {
+		return TIN.length;
+	}
+	public int getTOUTLength() {
+		return TOUT.length;
+	}
+	public TransactionOut getTOUT(int index) {
+		return TOUT[index];
+	}
+	public TransactionIn[] getAllTIN() {
+		return TIN;
+	}
+	public TransactionOut[] getAllTOUT() {
+		return TOUT;
 	}
 }

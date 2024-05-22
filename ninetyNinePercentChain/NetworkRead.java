@@ -1,4 +1,5 @@
-public class NetworkRead {
+package ninetyNinePercentChain;
+class NetworkRead {
 	public static void add(Object toAdd) {
 		if(toAdd.getClass()==Transaction.class) {
 			if(CheckValidity.checkTransaction((Transaction) toAdd)) {

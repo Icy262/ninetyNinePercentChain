@@ -1,11 +1,12 @@
+package ninetyNinePercentChain;
 import java.net.Socket;
 import java.lang.Thread;
 import java.io.ObjectInputStream;
 
-class QueryDNS extends Thread {
+public class QueryDNS extends Thread {
+	private int port=9940;
+	private String DNSIP="10.10.166.222";
 	public void run() {
-		int port=9940;
-		String DNSIP="10.10.166.222";
 		while(true) {
 			try {
 				Socket socket=new Socket(DNSIP, port);

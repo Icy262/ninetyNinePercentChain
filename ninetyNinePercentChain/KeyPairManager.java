@@ -1,10 +1,11 @@
+package ninetyNinePercentChain;
 import java.security.KeyPair;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
-public class KeyPairManager {
+class KeyPairManager {
 	public static KeyPair readKey(String keyName) {
 		try {
 			FileInputStream keyFile=new FileInputStream("./keys/"+keyName+".ser");

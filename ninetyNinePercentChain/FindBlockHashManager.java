@@ -1,3 +1,4 @@
+package ninetyNinePercentChain;
 public class FindBlockHashManager {
 	private static FindBlockHash search;
 	private static Block block;

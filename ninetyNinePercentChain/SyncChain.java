@@ -1,3 +1,4 @@
+package ninetyNinePercentChain;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.io.DataInputStream;

@@ -1,3 +1,4 @@
+package ninetyNinePercentChain;
 class ByteArray {
 	public static byte[] merge(byte[] array1, byte[] array2) {
 		byte[] mergedArray=new byte[array1.length+array2.length];

@@ -1,8 +1,9 @@
+package ninetyNinePercentChain;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.PrivateKey;
 
-public class Sign {
+class Sign {
 	public static byte[] privateKeySign(byte[] toSign, PrivateKey privateKey) {
 		try {
 			Signature signature = Signature.getInstance("SHA256WithDSA");

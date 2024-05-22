@@ -1,3 +1,4 @@
+package ninetyNinePercentChain;
 public class KeepAliveManager extends Thread {
 	public void run() {
 		while(true) {

@@ -1,7 +1,8 @@
+package ninetyNinePercentChain;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 
-public class NewKeyPair {
+class NewKeyPair {
 	public static KeyPair newKeyPair() {
 		try {
 			return KeyPairGenerator.getInstance("DSA").generateKeyPair();

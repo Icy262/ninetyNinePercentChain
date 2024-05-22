@@ -1,8 +1,9 @@
+package ninetyNinePercentChain;
 import java.net.Socket;
 import java.lang.Thread;
 import java.io.ObjectOutputStream;
 
-class RegisterDNS extends Thread {
+public class RegisterDNS extends Thread {
 	public void run() {
 		int port=9941;
 		String DNSIP="10.10.166.222";
