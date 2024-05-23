@@ -11,7 +11,7 @@ public class Main {
 		new QueryDNS().start();
 		new KeepAliveResponse().start();
 		new KeepAliveManager().start();
-		new NetworkReceiveHandler().start();
+		new NetworkReceiveHandler(true).start();
 		new SyncChainResponseManager().start();
 	}
 }
