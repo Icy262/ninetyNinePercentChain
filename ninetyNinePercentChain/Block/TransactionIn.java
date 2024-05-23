@@ -1,8 +1,10 @@
 package ninetyNinePercentChain.Block;
 import java.io.ByteArrayOutputStream;
+import java.security.PrivateKey;
 
 import ninetyNinePercentChain.Block.Hashing.MerkleTreeable;
 import ninetyNinePercentChain.Block.Hashing.Sign;
+import ninetyNinePercentChain.Utils.BlockFile;
 import ninetyNinePercentChain.Utils.SHA256Hash;
 
 public class TransactionIn implements MerkleTreeable {
@@ -23,6 +25,9 @@ public class TransactionIn implements MerkleTreeable {
 	public void sign(String keyName) {
 		privateKeySignature=Sign.privateKeySign(toByteArray(), keyName);
 	}
+	public void sign(PrivateKey key) {
+		privateKeySignature=Sign.privateKeySign(toByteArray(), key);
+	}
 	public int getPreviousOutBlock() {
 		return previousOutBlock;
 	}
@@ -39,5 +44,10 @@ public class TransactionIn implements MerkleTreeable {
 		this.previousOutBlock=previousOutBlock;
 		this.previousOutTransaction=previousOutTransaction;
 		this.previousOutOutputNumber=previousOutOutputNumber;
+	}
+	public int getValue() {
+		Block block=BlockFile.readBlock(previousOutBlock); //The block that stores the previous output transaction
+		Transaction transaction=block.getTransaction(previousOutTransaction); //The transaction the holds the previous output transaction
+		return transaction.getTOUT(previousOutOutputNumber).getValue();
 	}
 }
