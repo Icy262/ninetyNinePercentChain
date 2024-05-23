@@ -75,6 +75,9 @@ public class Transaction implements Serializable, MerkleTreeable {
 	public TransactionOut getTOUT(int index) {
 		return TOUT[index];
 	}
+	public TransactionIn getTIN(int index) {
+		return TIN[index];
+	}
 	public TransactionIn[] getAllTIN() {
 		return TIN;
 	}
