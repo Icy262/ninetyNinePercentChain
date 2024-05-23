@@ -12,4 +12,7 @@ public class NetworkReceiveHandler extends Thread {
 			System.out.println(e);
 		}
 	}
+	public NetworkReceiveHandler(boolean hashing) {
+		NetworkRead.setHashing(hashing);
+	}
 }
