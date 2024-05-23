@@ -1,9 +1,9 @@
-import ninetyNinePercentChain.KeepAliveManager;
-import ninetyNinePercentChain.KeepAliveResponse;
-import ninetyNinePercentChain.NetworkReceiveHandler;
-import ninetyNinePercentChain.QueryDNS;
-import ninetyNinePercentChain.RegisterDNS;
-import ninetyNinePercentChain.SyncChainResponseManager;
+import ninetyNinePercentChain.Network.DNS.QueryDNS;
+import ninetyNinePercentChain.Network.DNS.RegisterDNS;
+import ninetyNinePercentChain.Network.InterNode.Read.NetworkReceiveHandler;
+import ninetyNinePercentChain.Network.InterNode.Sync.SyncChainResponseManager;
+import ninetyNinePercentChain.Network.KeepAlive.KeepAliveManager;
+import ninetyNinePercentChain.Network.KeepAlive.KeepAliveResponse;
 
 public class Main {
 	public static void main(String[] args) {
