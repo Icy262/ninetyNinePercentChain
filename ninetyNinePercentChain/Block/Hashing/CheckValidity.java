@@ -15,23 +15,30 @@ import ninetyNinePercentChain.Utils.ByteArray;
 
 public class CheckValidity {
 	public static boolean checkBlock(Block toCheck) {
-		if(!Block.checkHashZeros(toCheck.hash(), 16)) {
-			return false;
-		} else if(!(new File("./blockchain/"+toCheck.getIndex()+".ser").exists()&&BlockFile.readBlock(toCheck.getIndex()).equals(toCheck))) {
-			return false;
-		} else if(!Arrays.equals(BlockFile.readBlock(toCheck.getIndex()-1).hash(), toCheck.getPreviousHash())) {
-			return false;
-		} else if(!Arrays.equals(toCheck.getMerkleRoot(), new MerkleTree<Transaction>(toCheck.getAllTransactions()).genTree())) {
-			return false;
-		} if(toCheck.getIndex()<=0) {
-			return false;
-		}
-		for(int i=0; i<toCheck.getNumTransactions(); i++) {
-			if(!checkTransaction(toCheck.getTransaction(i))) {
+		try {
+			if(!Block.checkHashZeros(toCheck.hash(), 16)) {
+				return false;
+			} else if(!(new File("./blockchain/"+toCheck.getIndex()+".ser").exists()&&BlockFile.readBlock(toCheck.getIndex()).equals(toCheck))) {
+				return false;
+			} else if(!Arrays.equals(BlockFile.readBlock(toCheck.getIndex()-1).hash(), toCheck.getPreviousHash())) {
+				return false;
+			} else if(!Arrays.equals(toCheck.getMerkleRoot(), new MerkleTree<Transaction>(toCheck.getAllTransactions()).genTree())) {
+				return false;
+			} if(toCheck.getIndex()<=0) {
+				return false;
+			} if(toCheck.getAllTransactions().size()==0) {
 				return false;
 			}
+			for(int i=0; i<toCheck.getNumTransactions(); i++) {
+				if(!checkTransaction(toCheck.getTransaction(i))) {
+					return false;
+				}
+			}
+			return true;
+		} catch(Exception e) {
+			System.out.println(e);
+			return false;
 		}
-		return true;
 	}
 	public static boolean checkTransaction(Transaction toCheck) {
 		try {
@@ -47,18 +54,14 @@ public class CheckValidity {
 					return false;
 				}
 			}
-		} catch(Exception e) {
-			System.out.println(e);
-		}
-		ArrayList<TransactionIn> TINArrayList=new ArrayList<TransactionIn>(Arrays.asList(toCheck.getAllTIN()));
-		ArrayList<TransactionOut> TOUTArrayList=new ArrayList<TransactionOut>(Arrays.asList(toCheck.getAllTOUT()));
-		byte[] TINMerkleRoot=new MerkleTree<TransactionIn>(TINArrayList).genTree();
-		byte[] TOUTMerkleRoot=new MerkleTree<TransactionOut>(TOUTArrayList).genTree();
-		byte[] calculatedMerkleRoot=ByteArray.merge(TINMerkleRoot, TOUTMerkleRoot);
-		if(!Arrays.equals(toCheck.getMerkleRoot(), calculatedMerkleRoot)) {
-			return false;
-		}
-		try {
+			ArrayList<TransactionIn> TINArrayList=new ArrayList<TransactionIn>(Arrays.asList(toCheck.getAllTIN()));
+			ArrayList<TransactionOut> TOUTArrayList=new ArrayList<TransactionOut>(Arrays.asList(toCheck.getAllTOUT()));
+			byte[] TINMerkleRoot=new MerkleTree<TransactionIn>(TINArrayList).genTree();
+			byte[] TOUTMerkleRoot=new MerkleTree<TransactionOut>(TOUTArrayList).genTree();
+			byte[] calculatedMerkleRoot=ByteArray.merge(TINMerkleRoot, TOUTMerkleRoot);
+			if(!Arrays.equals(toCheck.getMerkleRoot(), calculatedMerkleRoot)) {
+				return false;
+			}
 			for(int i=0; i<toCheck.getTINLength(); i++) {
 				TransactionIn currentTransactionIn=toCheck.getTransactionIn(i);
 				int previousOutBlock=currentTransactionIn.getPreviousOutBlock();
@@ -74,23 +77,22 @@ public class CheckValidity {
 					return false;
 				}
 			}
+			int totalValueInput=0;
+			int totalValueOutput=0;
+			for(int i=0; i<toCheck.getTINLength(); i++) {
+				totalValueInput+=toCheck.getTIN(i).getValue();
+			}
+			for(int i=0; i<toCheck.getTOUTLength(); i++) {
+				totalValueOutput+=toCheck.getTransactionOut(i).getValue();
+			}
+			if(totalValueInput!=totalValueOutput) {
+				return false;
+			}
+			//CHECK FOR OUTPUT TRANSACTION ALREADY BEING SPENT
+			return true;
 		} catch(Exception e) {
 			System.out.println(e);
-		}
-		int totalValueInput=0;
-		int totalValueOutput=0;
-		for(int i=0; i<toCheck.getTINLength(); i++) {
-			Block block=BlockFile.readBlock(toCheck.getTransactionIn(i).getPreviousOutBlock()); //The block that stores the previous output transaction
-			Transaction transaction=block.getTransaction(toCheck.getTransactionIn(i).getPreviousOutTransaction()); //The transaction the holds the previous output transaction
-			totalValueInput+=transaction.getTOUT(toCheck.getTransactionIn(i).getPreviousOutOutputNumber()).getValue();
-		}
-		for(int i=0; i<toCheck.getTOUTLength(); i++) {
-			totalValueInput+=toCheck.getTransactionOut(i).getValue();
-		}
-		if(totalValueInput!=totalValueOutput) {
 			return false;
 		}
-		//CHECK FOR OUTPUT TRANSACTION ALREADY BEING SPENT
-		return true;
 	}
 }
