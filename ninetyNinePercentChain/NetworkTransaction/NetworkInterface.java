@@ -22,7 +22,7 @@ import ninetyNinePercentChain.Network.KeepAlive.KeepAliveManager;
 import ninetyNinePercentChain.Network.KeepAlive.KeepAliveResponse;
 import ninetyNinePercentChain.Utils.BlockFile;
 
-class NetworkInterface {
+public class NetworkInterface {
 	public static void setup() {
 		new QueryDNS().start();
 		new RegisterDNS().start();
@@ -54,7 +54,7 @@ class NetworkInterface {
 			System.out.println(e);
 		}
 	}
-	public static TransactionIn[] findInputs(byte[] keyAsByteArray, int value, PrivateKey privateKey) throws InsuffientFundsException {
+	private static TransactionIn[] findInputs(byte[] keyAsByteArray, int value, PrivateKey privateKey) throws InsuffientFundsException {
 		ArrayList<TransactionIn> transactionList=new ArrayList<TransactionIn>();
 		int addressBalance=0;
 		for(int i=BlockFile.getHighestIndex(); i>=0; i--) {
@@ -75,7 +75,7 @@ class NetworkInterface {
 		}
 		throw new InsuffientFundsException();
 	}
-	public static int findTotalValue(TransactionIn[] transactionIns) {
+	private static int findTotalValue(TransactionIn[] transactionIns) {
 		int totalValue=0;
 		for(int i=0; i<transactionIns.length; i++) {
 			totalValue+=transactionIns[i].getValue();
