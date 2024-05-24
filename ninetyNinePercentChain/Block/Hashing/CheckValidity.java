@@ -14,6 +14,12 @@ import ninetyNinePercentChain.Utils.BlockFile;
 import ninetyNinePercentChain.Utils.ByteArray;
 
 public class CheckValidity {
+	/*
+	Name: checkBlock
+	Description: Checks the validity of a given block.
+	Precondition: None
+	Postcondition: Returns true if the block is valid; otherwise, false.
+	*/
 	public static boolean checkBlock(Block toCheck) {
 		try {
 			if(!Block.checkHashZeros(toCheck.hash(), 16)) {
@@ -40,6 +46,12 @@ public class CheckValidity {
 			return false;
 		}
 	}
+	/*
+	Name: checkTransaction
+	Description: Checks the validity of a given transaction.
+	Precondition: None
+	Postcondition: Returns true if the transaction is valid; otherwise, false.
+	*/
 	public static boolean checkTransaction(Transaction toCheck) {
 		try {
 			for(int i=0; i<toCheck.getTINLength(); i++) {
