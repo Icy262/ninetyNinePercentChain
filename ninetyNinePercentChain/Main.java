@@ -1,3 +1,4 @@
+package ninetyNinePercentChain;
 import ninetyNinePercentChain.Network.DNS.QueryDNS;
 import ninetyNinePercentChain.Network.DNS.RegisterDNS;
 import ninetyNinePercentChain.Network.InterNode.Read.NetworkReceiveHandler;
