@@ -22,9 +22,7 @@ public class CheckValidity {
 	*/
 	public static boolean checkBlock(Block toCheck) {
 		try {
-			if(!Block.checkHashZeros(toCheck.hash(), 16)) {
-				return false;
-			} else if(!(new File("./blockchain/"+toCheck.getIndex()+".ser").exists()&&BlockFile.readBlock(toCheck.getIndex()).equals(toCheck))) {
+			if(!(new File("./blockchain/"+toCheck.getIndex()+".ser").exists()&&BlockFile.readBlock(toCheck.getIndex()).equals(toCheck))) {
 				return false;
 			} else if(!Arrays.equals(BlockFile.readBlock(toCheck.getIndex()-1).hash(), toCheck.getPreviousHash())) {
 				return false;
@@ -54,6 +52,7 @@ public class CheckValidity {
 	*/
 	public static boolean checkTransaction(Transaction toCheck) {
 		try {
+			//Checks that for each TIN, the merkle root of the TIN signed by the private key that matches the public key in the TOUT is correct
 			for(int i=0; i<toCheck.getTINLength(); i++) {
 				byte[] encryptedHash=toCheck.getTransactionIn(i).getPrivateKeySignature();
 				Block block=BlockFile.readBlock(toCheck.getTransactionIn(i).getPreviousOutBlock());
@@ -66,6 +65,7 @@ public class CheckValidity {
 					return false;
 				}
 			}
+			//Checks the merkle root is correct
 			ArrayList<TransactionIn> TINArrayList=new ArrayList<TransactionIn>(Arrays.asList(toCheck.getAllTIN()));
 			ArrayList<TransactionOut> TOUTArrayList=new ArrayList<TransactionOut>(Arrays.asList(toCheck.getAllTOUT()));
 			byte[] TINMerkleRoot=new MerkleTree<TransactionIn>(TINArrayList).genTree();
@@ -74,7 +74,7 @@ public class CheckValidity {
 			if(!Arrays.equals(toCheck.getMerkleRoot(), calculatedMerkleRoot)) {
 				return false;
 			}
-			for(int i=0; i<toCheck.getTINLength(); i++) {
+			for(int i=0; i<toCheck.getTINLength(); i++) { //Checks that each of the signatures matches the private key used in the TIN and the merkle root of the transaction
 				TransactionIn currentTransactionIn=toCheck.getTransactionIn(i);
 				int previousOutBlock=currentTransactionIn.getPreviousOutBlock();
 				Block block=BlockFile.readBlock(previousOutBlock);

@@ -19,15 +19,32 @@ public class Transaction implements Serializable, MerkleTreeable {
 	private byte[] merkleRoot; //Header
 	private long timestamp=System.currentTimeMillis(); //Header
 	private byte[][] signature; //Not in header. Contains the merkle root signed by each of the TIN private keys.
-
+	/*
+	Name: Transaction
+	Description: Constructor. Sets the values of our TINs, TOUTs, and our timestamp
+	Precondition: TIN and TOUT are not null and contain valid TransactionIns and TransactionOuts. timestamp is the number of milliseconds since midnight, January 1, 1970.
+	Postcondition: TIN, TOUT, and timestamp initalized to the specified values
+	*/
 	public Transaction(TransactionIn[] TIN, TransactionOut[] TOUT, long timestamp) {
 		this.TIN=TIN;
 		this.TOUT=TOUT;
 		this.timestamp=timestamp;
 	}
+	/*
+	Name: hash
+	Description: Converts the header to a byte array, hashes it, and returns it
+	Precondition: All header values have been initialized
+	Postcondition: SHA256 hash of the header returned. The same output value will always be returned for the same header values. 
+	*/
 	public byte[] hash() {
 		return SHA256Hash.hash(headerAsByteArray());
 	}
+	/*
+	Name: headerAsByteArray
+	Description: Converts the header into a byte array in a deterministic manner
+	Precondition: All values in header initialized
+	Postcondition: header converted to byte array and returned
+	*/
 	public byte[] headerAsByteArray() {
 		try {
 			ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream();
@@ -42,7 +59,21 @@ public class Transaction implements Serializable, MerkleTreeable {
 			return null;
 		}
 	}
+	/*
+	Name: signTransaction
+	Description: For each key in keyNames, sign the header with the private key. If there is only one key, and there are multiple TINs, we just sign the transaction multiple times with the same private key 
+	Precondition: Each keyName in keyNames corresponds to a valid key in the keystore
+	Postcondition: signatures is generated
+	*/
 	public void signTransaction(String[] keyNames) {
+		signature=new byte[TIN.length][32];
+		if(keyNames.length==1) {
+			String bufferKeyName=keyNames[0];
+			keyNames=new String[TIN.length];
+			for(int i=0; i<keyNames.length; i++) {
+				keyNames[i]=bufferKeyName;
+			}
+		}
 		try {
 			for(int i=0; i<TIN.length; i++) {
 				signature[i]=Sign.privateKeySign(headerAsByteArray(), KeyPairManager.readKey(keyNames[i]).getPrivate());

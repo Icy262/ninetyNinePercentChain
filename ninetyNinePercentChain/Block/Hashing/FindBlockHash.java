@@ -17,9 +17,10 @@ class FindBlockHash extends Thread {
 		byte[] headerAsByteArray=blockToHash.headerAsByteArray();
 		ByteBuffer nonce=ByteBuffer.wrap(headerAsByteArray, 12, 8);
 		nonce.asLongBuffer();
-		do {
-			nonce.putLong(12, nonce.getLong(12)+1);
-		} while(!Block.checkHashZeros(SHA256Hash.hash(headerAsByteArray), numZeros));
+		//We disabled the zero requirement so that hashes can be computed instantly
+		// do {
+		nonce.putLong(12, nonce.getLong(12)+1);
+		// } while(!Block.checkHashZeros(SHA256Hash.hash(headerAsByteArray), numZeros));
 		blockToHash.setNonce(nonce.getLong(12));
 		FindBlockHashManager.validBlockFound(blockToHash);
 	}

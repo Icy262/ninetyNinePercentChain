@@ -1,5 +1,7 @@
 package ninetyNinePercentChain.Block.Hashing;
 
+import java.util.ArrayList;
+
 import ninetyNinePercentChain.Block.Block;
 import ninetyNinePercentChain.Block.Transaction;
 import ninetyNinePercentChain.Network.InterNode.Write.NetworkSendManager;
@@ -30,7 +32,12 @@ public class FindBlockHashManager {
 		if(search!=null) {
 			search.interrupt();
 		}
-		block.addTransaction(newTransaction);
+		if(block!=null) {
+			block.addTransaction(newTransaction);
+		} else {
+			block=new Block(BlockFile.getHighestIndex()+1, System.currentTimeMillis(), BlockFile.readBlock(BlockFile.getHighestIndex()-1).hash(), new ArrayList<Transaction>());
+			block.addTransaction(newTransaction);
+		}
 		search=new FindBlockHash(block, 16);
 	}
 }

@@ -44,7 +44,9 @@ public class NetworkInterface {
 		} else {
 			transactionOuts=new TransactionOut[] {new TransactionOut(outKey.getEncoded(), value), new TransactionOut(keyPair.getPublic().getEncoded(), totalValue-value)};
 		}
-		NetworkSendManager.addToQueue((Object) new Transaction(transactionIns, transactionOuts, System.currentTimeMillis()));
+		Transaction transaction=new Transaction(transactionIns, transactionOuts, System.currentTimeMillis());
+		transaction.signTransaction(new String[] {keyName});
+		NetworkSendManager.addToQueue((Object) transaction);
 	}
 	public static void createTransaction(int value, String keyName, byte[] outKey) throws InsuffientFundsException {
 		try {
