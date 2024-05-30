@@ -3,14 +3,14 @@ package ninetyNinePercentChain.NetworkTransaction;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import ninetyNinePercentChain.Block.Transaction;
+import ninetyNinePercentChain.Block.Block;
 
 public class WaitForTransactionManager {
 	private static ArrayList<WaitForTransaction> waiting=new ArrayList<WaitForTransaction>();
 	public static void addWait(WaitForTransaction waiter) {
 		waiting.add(waiter);
 	}
-	public static void update(Transaction transaction) {
+	public static void update(Block transaction) {
 		if(waiting.size()==0) {
 			return;
 		}

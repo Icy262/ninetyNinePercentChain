@@ -82,36 +82,84 @@ public class Transaction implements Serializable, MerkleTreeable {
 			System.out.println(e);
 		}
 	}
+	/*
+	Name: genMerkleRoot
+	Description: Converts the TIN to an ArrayList and generates the merkle root. It also converts the TOUT to an ArrayList and generates the merkle root. It merges the two merkle roots together and sets the value of the merkle root in the Transaction to this value.
+	Precondition: The TIN and TOUT arrays have been initialized
+	Postcondition: The merkle root field in the Transaction has been set
+	*/
 	private void genMerkleRoot() {
 		merkleRoot=ByteArray.merge(new MerkleTree<TransactionIn>(new ArrayList<TransactionIn>(Arrays.asList(TIN))).genTree(), new MerkleTree<TransactionOut>(new ArrayList<TransactionOut>(Arrays.asList(TOUT))).genTree());
 	}
+	/*
+	Name: getMerkleRoot
+	Description: Gets the value of the merkleRoot
+	Precondition: The merkleRoot has been generated
+	Postcondition: The value of the merkleRoot field is returned
+	*/
 	public byte[] getMerkleRoot() {
 		return merkleRoot;
 	}
+	/*
+	Name: getSignature
+	Description: returns the value of index index in the signature array
+	Precondition: The signature array has been generated
+	Postcondition: The value at index index in the signature array returned
+	*/
 	public byte[] getSignature(int index) {
 		return signature[index];
 	}
-	public TransactionIn getTransactionIn(int index) {
-		return TIN[index];
-	}
-	public TransactionOut getTransactionOut(int index) {
-		return TOUT[index];
-	}
-	public int getTINLength() {
-		return TIN.length;
-	}
-	public int getTOUTLength() {
-		return TOUT.length;
-	}
-	public TransactionOut getTOUT(int index) {
-		return TOUT[index];
-	}
+	/*
+	Name: getTOUT
+	Description: Returns the TransactionIn at index index in the TIN array
+	Precondition: There is a index index in the TIN array
+	Postcondition: TransactionIn at index index in the TIN array is returned
+	*/
 	public TransactionIn getTIN(int index) {
 		return TIN[index];
 	}
+	/*
+	Name: getTOUT
+	Description: Returns the TransactionOut at index index in the TOUT array
+	Precondition: There is an index index in the TOUT array
+	Postcondition: TransactionOut at index index in the TOUT array is returned
+	*/
+	public TransactionOut getTOUT(int index) {
+		return TOUT[index];
+	}
+	/*
+	Name: getTINLength
+	Description: Gets the length of the TIN array and returns it
+	Precondition: TIN has been initialized
+	Postcondition: The length of TIN is returned
+	*/
+	public int getTINLength() {
+		return TIN.length;
+	}
+	/*
+	Name: getTOUTLength
+	Description: Gets the length of the TOUT array and returns it
+	Precondition: TOUT has been initialized
+	Postcondition: The length of TOUT is returned
+	*/
+	public int getTOUTLength() {
+		return TOUT.length;
+	}
+	/*
+	Name: getAllTIN
+	Description: Returns the entire array of TINS
+	Precondition: TIN has been initialized
+	Postcondition: Returns the TIN array
+	*/
 	public TransactionIn[] getAllTIN() {
 		return TIN;
 	}
+	/*
+	Name: getAllTOUT
+	Description: Returns the entire array of TOUTs
+	Precondition: TOUT has been initialized
+	Postcondition: Returns the TOUT array
+	*/
 	public TransactionOut[] getAllTOUT() {
 		return TOUT;
 	}

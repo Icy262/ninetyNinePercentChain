@@ -4,6 +4,12 @@ import java.lang.Thread;
 import java.io.ObjectOutputStream;
 
 public class RegisterDNS extends Thread {
+	/*
+	Name: run
+	Description: Opens a socket to the DNS Seed server. Sends the public IP address of this computer.
+	Precondition: None
+	Postcondition: None
+	*/
 	public void run() {
 		int port=9941;
 		String DNSIP="10.10.166.222";

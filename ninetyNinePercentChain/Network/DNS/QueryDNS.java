@@ -9,8 +9,15 @@ import java.io.ObjectInputStream;
 public class QueryDNS extends Thread {
 	private int port=9940;
 	private String DNSIP="10.10.166.222";
+	private boolean continueThread=true;
+	/*
+	Name: run
+	Description: Opens a Socket to the DNS Seed server. Reads 10 IP addresses from the socket and adds them to the NodeIP list. Closes the socket and waits. If there were no IPs given, wait one second before trying again. If not, wait ten minutes.
+	Precondition: None
+	Postcondition: IP addresses are added to the NodeIP list.
+	*/
 	public void run() {
-		while(true) {
+		while(continueThread) {
 			try {
 				Socket socket=new Socket(DNSIP, port);
 				ObjectInputStream read=new ObjectInputStream(socket.getInputStream());
@@ -28,5 +35,14 @@ public class QueryDNS extends Thread {
 				e.printStackTrace();
 			}
 		}
+	}
+	/*
+	Name: stopThread
+	Description: Sets a flag to false. This causes the thread to stop.
+	Precondition: None
+	Postcondition: Thread is stopped, if running
+	*/
+	public void stopThread() {
+		continueThread=false;
 	}
 }

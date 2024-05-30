@@ -3,16 +3,38 @@ import java.lang.Thread;
 import java.net.ServerSocket;
 
 public class NetworkReceiveHandler extends Thread {
+	private boolean continueRunning=true;
+	/*
+	Name: run
+	Description: Listens on port 9938 for incoming sockets. Whenever we recieve an incoming socket, we open a new socket conection in a new thread to handle it.
+	Precondition: None
+	Postcondition: None
+	*/
 	public void run() {
 		try(ServerSocket endpoint=new ServerSocket(9938)) {
-			while(true) {
+			while(continueRunning) {
 				new NetworkReceive(endpoint.accept()).start();
 			}
 		} catch(Exception e) {
 			System.out.println(e);
 		}
 	}
+	/*
+	Name: NetworkRecieveHandler
+	Description: Lets us set the NetworkRead hashing flag
+	Precondition: None
+	Postcondition: NetworkRead hashing flag set to the value of hashing
+	*/
 	public NetworkReceiveHandler(boolean hashing) {
 		NetworkRead.setHashing(hashing);
+	}
+	/*
+	Name: stopThread
+	Description: Sets the continueRunning flag to false
+	Precondition: None
+	Postcondition: continueRunning flag set to false. Thread will stop.
+	*/
+	public void stopThread() {
+		continueRunning=false;
 	}
 }

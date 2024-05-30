@@ -2,7 +2,6 @@ package ninetyNinePercentChain.Block.Hashing;
 import java.nio.ByteBuffer;
 
 import ninetyNinePercentChain.Block.Block;
-import ninetyNinePercentChain.Utils.SHA256Hash;
 
 class FindBlockHash extends Thread {
 	Block blockToHash; //The block we are searching for a nonce for

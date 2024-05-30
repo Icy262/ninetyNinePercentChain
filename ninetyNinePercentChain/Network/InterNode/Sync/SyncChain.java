@@ -9,6 +9,12 @@ import java.io.DataInputStream;
 
 public class SyncChain extends Thread {
 	private String ip;
+	/*
+	Name: run
+	Description: Opens a socket connection. Reads a number of blocks being transfered. Reads an object from the stream that many times. Passes all the objects on to the NetworkRead to be handled appropriately.
+	Precondition: None
+	Postcondition: All objects recieved are added to the NetworkRead queue
+	*/
 	public void run() {
 		try(Socket endpoint=new Socket(ip, 9942)) {
 				DataInputStream primitiveInputStream=new DataInputStream(endpoint.getInputStream());
@@ -20,6 +26,12 @@ public class SyncChain extends Thread {
 			System.out.println(e);
 		}
 	}
+	/*
+	Name: SyncChain
+	Description: Constructor. Allows us to specify the ip to connect to
+	Precondition: ip is a valid ip address and there is a node running on that ip
+	Postcondition: this.ip set to ip
+	*/
 	public SyncChain(String ip) {
 		this.ip=ip;
 	}

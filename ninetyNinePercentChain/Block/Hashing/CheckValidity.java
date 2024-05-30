@@ -54,14 +54,14 @@ public class CheckValidity {
 		try {
 			//Checks that for each TIN, the merkle root of the TIN signed by the private key that matches the public key in the TOUT is correct
 			for(int i=0; i<toCheck.getTINLength(); i++) {
-				byte[] encryptedHash=toCheck.getTransactionIn(i).getPrivateKeySignature();
-				Block block=BlockFile.readBlock(toCheck.getTransactionIn(i).getPreviousOutBlock());
-				Transaction transaction=block.getTransaction(toCheck.getTransactionIn(i).getPreviousOutTransaction());
-				TransactionOut out=transaction.getTOUT(toCheck.getTransactionIn(i).getPreviousOutOutputNumber());
+				byte[] encryptedHash=toCheck.getTIN(i).getPrivateKeySignature();
+				Block block=BlockFile.readBlock(toCheck.getTIN(i).getPreviousOutBlock());
+				Transaction transaction=block.getTransaction(toCheck.getTIN(i).getPreviousOutTransaction());
+				TransactionOut out=transaction.getTOUT(toCheck.getTIN(i).getPreviousOutOutputNumber());
 				byte[] publicKeyBytes=out.getNextTransactionPublicKey();
 				PublicKey publicKey=KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(publicKeyBytes));
 				byte[] decryptedHash=Sign.publicKeySign(encryptedHash, publicKey);
-				if(!Arrays.equals(decryptedHash, toCheck.getTransactionIn(i).hash())) {
+				if(!Arrays.equals(decryptedHash, toCheck.getTIN(i).hash())) {
 					return false;
 				}
 			}
@@ -75,12 +75,12 @@ public class CheckValidity {
 				return false;
 			}
 			for(int i=0; i<toCheck.getTINLength(); i++) { //Checks that each of the signatures matches the private key used in the TIN and the merkle root of the transaction
-				TransactionIn currentTransactionIn=toCheck.getTransactionIn(i);
+				TransactionIn currentTransactionIn=toCheck.getTIN(i);
 				int previousOutBlock=currentTransactionIn.getPreviousOutBlock();
 				Block block=BlockFile.readBlock(previousOutBlock);
 				int previousOutTransaction=currentTransactionIn.getPreviousOutTransaction();
 				Transaction transaction=block.getTransaction(previousOutTransaction);
-				int previousOutOutputNumber=toCheck.getTransactionIn(i).getPreviousOutOutputNumber();
+				int previousOutOutputNumber=toCheck.getTIN(i).getPreviousOutOutputNumber();
 				TransactionOut out=transaction.getTOUT(previousOutOutputNumber);
 				byte[] publicKeyBytes=out.getNextTransactionPublicKey();
 				PublicKey publicKey=KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(publicKeyBytes));
@@ -95,7 +95,7 @@ public class CheckValidity {
 				totalValueInput+=toCheck.getTIN(i).getValue();
 			}
 			for(int i=0; i<toCheck.getTOUTLength(); i++) {
-				totalValueOutput+=toCheck.getTransactionOut(i).getValue();
+				totalValueOutput+=toCheck.getTOUT(i).getValue();
 			}
 			if(totalValueInput!=totalValueOutput) {
 				return false;

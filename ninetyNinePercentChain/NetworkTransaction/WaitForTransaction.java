@@ -3,6 +3,8 @@ package ninetyNinePercentChain.NetworkTransaction;
 public class WaitForTransaction {
 	private byte[] address;
 	private int value;
+	//NEED TO ADD A TIMESTAMP
+	//WE SHOULD CHECK THAT THE TRANSACTION WAS CREATED AFTER A CERTAIN TIME, BUT BEFORE NOW (NOT IN THE FUTURE).
 	public WaitForTransaction(byte[] address, int value) {
 		this.address=address;
 		this.value=value;
