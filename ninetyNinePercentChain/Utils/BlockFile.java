@@ -11,6 +11,12 @@ import java.io.IOException;
 import java.io.File;
 
 public class BlockFile {
+	/*
+	Name: readBlock
+	Description: Reads block number blockNum from the file and returns it
+	Precondition: Block number blockNum exists
+	Postcondition: Block number blockNum returned
+	*/
 	public static Block readBlock(int blockNum) {
 		try {
 			FileInputStream blockFile=new FileInputStream("./blockchain/"+String.valueOf(blockNum)+".ser");
@@ -24,6 +30,12 @@ public class BlockFile {
 		}
 		return null;
 	}
+	/*
+	Name: writeBlock
+	Description: Writes the passed block to a file named its index+".ser"
+	Precondition: Block is initialized and valid
+	Postcondition: Block written to file
+	*/
 	public static void writeBlock(Block toWrite) {
 		try {
 			FileOutputStream blockFile=new FileOutputStream("./blockchain/"+String.valueOf(toWrite.getIndex())+".ser");
@@ -35,6 +47,12 @@ public class BlockFile {
 			System.out.println(e);
 		}
 	}
+	/*
+	Name: blockExists
+	Description: Checks if block number index is in our blockchain directory
+	Precondition: None
+	Postcondition: True returned if it exists, false if not.
+	*/
 	public static boolean blockExists(int index) {
 		try {
 			FileInputStream block=new FileInputStream("./blockchain/"+index+".ser");
@@ -47,6 +65,12 @@ public class BlockFile {
 			return true;
 		}
 	}
+	/*
+	Name: getHighestIndex
+	Description: Gets the number of files in the blockchain directory
+	Precondition: Only blocks are in blockchain directory. No missing blocks (eg. block 0, 1, 2, and 4 are present but 3 is not)
+	Postcondition: Highest block index returned
+	*/
 	public static int getHighestIndex() {
 		File directory=new File("./blockchain");
 		return directory.listFiles().length-1;
