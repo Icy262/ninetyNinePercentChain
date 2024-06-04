@@ -1,6 +1,7 @@
 package ninetyNinePercentChain;
 
 import java.util.Scanner;
+import java.lang.InterruptedException;
 
 import ninetyNinePercentChain.Network.DNS.QueryDNS;
 import ninetyNinePercentChain.Network.DNS.RegisterDNS;
@@ -8,9 +9,10 @@ import ninetyNinePercentChain.Network.InterNode.Read.NetworkReceiveHandler;
 import ninetyNinePercentChain.Network.InterNode.Sync.SyncChainResponseManager;
 import ninetyNinePercentChain.Network.KeepAlive.KeepAliveManager;
 import ninetyNinePercentChain.Network.KeepAlive.KeepAliveResponse;
+import ninetyNinePercentChain.Network.InterNode.Write.NetworkSendManager;
 
 public class Main {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		QueryDNS queryDNS=new QueryDNS(); //Creates a QueryDNS object
 		KeepAliveResponse keepAliveResponse=new KeepAliveResponse(); //Creates a KeepAliveResponse object
 		KeepAliveManager keepAliveManager=new KeepAliveManager(); //Creates a KeepAliveManager object
@@ -36,6 +38,9 @@ public class Main {
 				keepAliveManager.stopThread(); //Stops the keepAliveManager thread
 				networkReceiveHandler.stopThread(); //Stops the networkReceiveHandler thread
 				syncChainResponseManager.stopThread(); //Stops the syncChainRepsponseManager
+				NetworkSendManager.stopThreads(); //Stops all write threads
+				Thread.sleep(10000); //Gives a 10 second delay to ensure all thread cleanup is done
+				System.exit(0); //Stops the entire application. All of our stuff is cleaned up. All that is running now is this thread and the java vm threadss
 			}
 		}
 	}
