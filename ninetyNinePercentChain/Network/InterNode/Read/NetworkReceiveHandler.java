@@ -1,9 +1,13 @@
 package ninetyNinePercentChain.Network.InterNode.Read;
+
+import java.util.ArrayList;
+
 import java.lang.Thread;
 import java.net.ServerSocket;
 
 public class NetworkReceiveHandler extends Thread {
 	private boolean continueRunning=true;
+	ArrayList<NetworkReceive> networkReceiver=new ArrayList<NetworkReceive>();
 	/*
 	Name: run
 	Description: Listens on port 9938 for incoming sockets. Whenever we recieve an incoming socket, we open a new socket conection in a new thread to handle it.
@@ -13,7 +17,11 @@ public class NetworkReceiveHandler extends Thread {
 	public void run() {
 		try(ServerSocket endpoint=new ServerSocket(9938)) {
 			while(continueRunning) {
-				new NetworkReceive(endpoint.accept()).start();
+				networkReceiver.add(new NetworkReceive(endpoint.accept()));
+				networkReceiver.get(networkReceiver.size()-1).start();
+			}
+			for(int i=0; i<networkReceiver.size(); i++) {
+				networkReceiver.get(i).stopThread();
 			}
 		} catch(Exception e) {
 			System.out.println(e);

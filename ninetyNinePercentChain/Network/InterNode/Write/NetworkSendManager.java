@@ -44,4 +44,15 @@ public class NetworkSendManager {
 			networkSends.get(i).addToQueue(toSend);
 		}
 	}
+	/*
+	Name: stopThreads
+	Description: Stops all the threads managed by the NetworkSendManager
+	Precondition: None
+	Postcondition: All threads stopped
+	*/
+	public static void stopThreads() {
+		for(int i=0; i<networkSends.size(); i++) {
+			networkSends.get(i).stopThread();
+		}
+	}
 }
