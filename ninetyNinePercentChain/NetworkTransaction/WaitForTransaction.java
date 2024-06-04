@@ -1,9 +1,9 @@
 package ninetyNinePercentChain.NetworkTransaction;
 
 public class WaitForTransaction {
-	private byte[] sendAddress;
-	private byte[] recieveAddress;
-	private int value;
+	private byte[] sendAddress; //Address sending
+	private byte[] recieveAddress; //Address recieving
+	private int value; //Value
 	//NEED TO ADD A TIMESTAMP
 	//WE SHOULD CHECK THAT THE TRANSACTION WAS CREATED AFTER A CERTAIN TIME, BUT BEFORE NOW (NOT IN THE FUTURE).
 	//CHECK IF TRANSACTION WAS SENT FROM ADDRESS TO ADDRESS FOR AMOUNT
