@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
 import ninetyNinePercentChain.Block.Block;
+import ninetyNinePercentChain.Block.Transaction;
+import ninetyNinePercentChain.Block.TransactionIn;
+import ninetyNinePercentChain.Block.TransactionOut;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -74,5 +77,32 @@ public class BlockFile {
 	public static int getHighestIndex() {
 		File directory=new File("./blockchain");
 		return directory.listFiles().length-1;
+	}
+	/*
+	Name: getTransaction
+	Description: Takes a block index and transaction index and returns the transaction
+	Precondition: Block index blockIndex exists and contains Transaction index transactionIndex.
+	Postcondition: Transaction returned
+	*/
+	public static Transaction getTransaction(int blockIndex, int transactionIndex) {
+		return readBlock(blockIndex).getTransaction(transactionIndex);
+	}
+	/*
+	Name: getTIN
+	Description: Takes a block index, transaction index, and TIN index and returns the TIN
+	Precondition: Block index blockIndex exists and contains Transaction index transactionIndex which contains TransactionIn index TINIndex
+	Postcondition: TIN returned
+	*/
+	public static TransactionIn getTIN(int blockIndex, int transactionIndex, int TINIndex) {
+		return getTransaction(blockIndex, transactionIndex).getTIN(TINIndex);
+	}
+	/*
+	Name: getOUT
+	Description: Takes a block index, transaction index, and TOUT index and returns the TOUT
+	Precondition: Block index blockIndex exists and contains Transaction index transactionIndex which contains TransactionOut index TOUTIndex
+	Postcondition: TOUT returned
+	*/
+	public static TransactionOut getTOUT(int blockIndex, int transactionIndex, int TOUTIndex) {
+		return getTransaction(blockIndex, transactionIndex).getTOUT(TOUTIndex);
 	}
 }
