@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import ninetyNinePercentChain.Network.NodeIP;
 
 public class NetworkSendManager {
-	private static ArrayList<NetworkSend> networkSends;
+	private static ArrayList<NetworkSend> networkSends=new ArrayList<NetworkSend>();
 	/*
 	Name: update
 	Description: Checks if each IP address coresponds to a IP address in the networkSends list. If there is already a network send for the ip, we skip this ip. If not, we create a new NetworkSend and add it to the list. We also check that each NetworkSend in networkSends's ip is in NodeIP. If it is not there, we remove the NetworkSend.  
