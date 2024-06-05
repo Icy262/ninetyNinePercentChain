@@ -5,8 +5,8 @@ import ninetyNinePercentChain.Network.InterNode.Sync.SyncChain;
 import ninetyNinePercentChain.Network.InterNode.Write.NetworkSendManager;
 
 public class NodeIP {
-	private static ArrayList<String> nodeIPs=new ArrayList<String>();
-	private static int currentIndex=0;
+	private static ArrayList<String> nodeIPs=new ArrayList<String>(); //List of other node's IP addresses
+	private static int currentIndex=0; //Tracks our current position in the array list.
 	/*
 	Name: addIP
 	Description: Checks if the list of IP addresses contains the ip. If it doesn't, we add the ip to the list, and update the NetworkSendManager and sync our version of the blockchain with them.
@@ -14,10 +14,10 @@ public class NodeIP {
 	Postcondition: IP added to list if not already there and new SyncChain thread started
 	*/
 	public static void addIP(String ip) {
-		if(!nodeIPs.contains(ip)) {
-			nodeIPs.add(ip);
-			NetworkSendManager.update();
-			new SyncChain(ip);
+		if(!nodeIPs.contains(ip)) { //If the IP is not already in our list,
+			nodeIPs.add(ip); //Add the IP to our list
+			NetworkSendManager.update(); //Update the NetworkSendManager so that it will send our Blocks and Transactions to the new IP
+			new SyncChain(ip); //Sync our version of the block chain with the other node
 		}
 	}
 	/*
@@ -27,8 +27,8 @@ public class NodeIP {
 	Postcondition: IP removed, if present
 	*/
 	public static void removeIP(String ip) {
-		nodeIPs.remove(ip);
-		NetworkSendManager.update();
+		nodeIPs.remove(ip); //Removes the IP from our list
+		NetworkSendManager.update(); //Updates the NetworkSendManager so that it will remove the IP
 	}
 	/*
 	Name: getIP
@@ -55,7 +55,7 @@ public class NodeIP {
 	Postcondition: Returns the next ip in the list
 	*/
 	public static String getNextIP() {
-		currentIndex=currentIndex++%nodeIPs.size();
-		return getIP(currentIndex);
+		currentIndex=currentIndex++%nodeIPs.size(); //Increments the index. If the index is past the end of the list, loop back around to the start.
+		return getIP(currentIndex); //Returns the next IP
 	}
 }

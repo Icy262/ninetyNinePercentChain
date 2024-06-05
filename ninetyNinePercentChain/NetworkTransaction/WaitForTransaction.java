@@ -6,7 +6,6 @@ public class WaitForTransaction {
 	private int value; //Value
 	//NEED TO ADD A TIMESTAMP
 	//WE SHOULD CHECK THAT THE TRANSACTION WAS CREATED AFTER A CERTAIN TIME, BUT BEFORE NOW (NOT IN THE FUTURE).
-	//CHECK IF TRANSACTION WAS SENT FROM ADDRESS TO ADDRESS FOR AMOUNT
 	/*
 	Name: WaitForTransaction
 	Description: Constructor. Sets what address we are monitoring for a transaction to a certain address for a certain value

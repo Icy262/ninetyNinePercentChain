@@ -1,5 +1,7 @@
 package ninetyNinePercentChain.Network.KeepAlive;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.ObjectOutputStream;
 import java.lang.Thread;
 
 public class KeepAliveResponse extends Thread {
@@ -13,8 +15,12 @@ public class KeepAliveResponse extends Thread {
 	*/
 	public void run() {
 		try(ServerSocket serverSocket=new ServerSocket(port);) {
-			while(continueRunning) {
-				serverSocket.accept().close();
+			while(continueRunning) { //While we should continue running,
+				Socket socket=serverSocket.accept(); //Accepts an incoming connection
+				ObjectOutputStream writer=new ObjectOutputStream(socket.getOutputStream()); //Makes an output stream. This lets us write data to the endpoint, which will prevent them from removing our IP
+				writer.write(0); //Writes arbitrary data
+				writer.close(); //Cleans up the writer so that we don't waste resouces
+				socket.close(); //Closes connection.
 			}
 		} catch(Exception e) {
 			System.out.println(e);

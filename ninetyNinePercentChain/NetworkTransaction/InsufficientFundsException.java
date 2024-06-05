@@ -8,6 +8,6 @@ class InsuffientFundsException extends Exception {
 	Postcondition: None
 	*/
 	public InsuffientFundsException() {
-		super();
+		super(); //We don't need to do anything special, we just need to be able to tell the caller why the transaction maker failed.
 	}
 }
