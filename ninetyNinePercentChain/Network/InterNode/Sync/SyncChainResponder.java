@@ -6,7 +6,7 @@ import java.net.Socket;
 import ninetyNinePercentChain.Utils.BlockFile;
 
 class SyncChainResponder extends Thread {
-	private Socket endpoint;
+	private Socket endpoint; //Our connection to the reciever
 	/*
 	Name: run
 	Description: Writes the number of blocks in the blockchain directory to the endopint and then writes every block in the blockchain directory over the socket to the endpoint.
@@ -15,11 +15,11 @@ class SyncChainResponder extends Thread {
 	*/
 	public void run() {
 		try {
-			DataOutputStream primitiveOutputStream=new DataOutputStream(endpoint.getOutputStream());
-			ObjectOutputStream objectOutputStream=new ObjectOutputStream(endpoint.getOutputStream());
-			primitiveOutputStream.writeInt(BlockFile.getHighestIndex());
-			for(int i=1; i<=BlockFile.getHighestIndex(); i++) {
-				objectOutputStream.writeObject(BlockFile.readBlock(i));
+			DataOutputStream primitiveOutputStream=new DataOutputStream(endpoint.getOutputStream()); //Opens a DataOutputStream to the reciever. We use this to send the number of blocks we are transferring
+			ObjectOutputStream objectOutputStream=new ObjectOutputStream(endpoint.getOutputStream()); //Opens a ObjectOutputStream to the reciever. We use this to send the blocks themselves
+			primitiveOutputStream.writeInt(BlockFile.getHighestIndex()-1); //Tells the reciever how many blocks to expect. We subtract one because we are skipping block 0
+			for(int i=1; i<=BlockFile.getHighestIndex(); i++) { //We skip index 0 because that one is our special orgin block and isn't technically valid.
+				objectOutputStream.writeObject(BlockFile.readBlock(i)); //Reads block i and sends it over the network
 			}
 		} catch(Exception e) {
 			System.out.println(e);
@@ -32,6 +32,6 @@ class SyncChainResponder extends Thread {
 	Postcondition: this.endpoint set to endpoint
 	*/
 	public SyncChainResponder(Socket endpoint) {
-		this.endpoint=endpoint;
+		this.endpoint=endpoint; //The connection to the reciever
 	}
 }

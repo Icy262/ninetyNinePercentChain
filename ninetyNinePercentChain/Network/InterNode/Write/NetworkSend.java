@@ -5,9 +5,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 class NetworkSend extends Thread {
-	private String ip;
-	private ArrayList<Object> sendQueue=new ArrayList<Object>();
-	private boolean continueRunning=true;
+	private String ip; //IP that we are supposed to connect to
+	private ArrayList<Object> sendQueue=new ArrayList<Object>(); //List of Objects we are supposed to send
+	private boolean continueRunning=true; //Flag to control if we continue running
 	/*
 	Name: NetworkSend
 	Description: Constructor. Allows us to set the ip that we open a socket to
@@ -24,11 +24,11 @@ class NetworkSend extends Thread {
 	Postcondition: None
 	*/
 	public void run() {
-		try(Socket endpoint=new Socket(ip, 9938)) {
-			ObjectOutputStream endpointOutputStream=new ObjectOutputStream(endpoint.getOutputStream());
-			while(continueRunning) {
-				endpointOutputStream.writeObject(sendQueue.remove(0));
-				wait();
+		try(Socket endpoint=new Socket(ip, 9938)) { //Our connection to the reciever
+			ObjectOutputStream endpointOutputStream=new ObjectOutputStream(endpoint.getOutputStream()); //ObjectOutputStream. Allows us to write the object we are writing.
+			while(continueRunning) { //While we should continue running,
+				endpointOutputStream.writeObject(sendQueue.remove(0)); //Writes the object we are supposed to write
+				wait(); //Waits. We will get notified whenever a new object is added to the queue
 			}
 		} catch(Exception e) {
 			System.out.println(e);
@@ -50,8 +50,8 @@ class NetworkSend extends Thread {
 	Postcondition: Object added to send queue and woken up
 	*/
 	public void addToQueue(Object toSend) {
-		sendQueue.add(toSend);
-		notify();
+		sendQueue.add(toSend); //Adds the object to the queue
+		notify(); //Wakes the thread so that it will send the object
 	}
 	/*
 	Name: stopThread
@@ -60,6 +60,7 @@ class NetworkSend extends Thread {
 	Postcondition: Thread is stopped
 	*/
 	public void stopThread() {
-		continueRunning=false;
+		continueRunning=false; //Sets continue running flag to false
+		notify(); //Breaks out of the wait
 	}
 }

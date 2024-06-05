@@ -8,7 +8,7 @@ import ninetyNinePercentChain.Network.InterNode.Read.NetworkRead;
 import java.io.DataInputStream;
 
 public class SyncChain extends Thread {
-	private String ip;
+	private String ip; //The IP we should open a connection to
 	/*
 	Name: run
 	Description: Opens a socket connection. Reads a number of blocks being transfered. Reads an object from the stream that many times. Passes all the objects on to the NetworkRead to be handled appropriately.
@@ -16,11 +16,11 @@ public class SyncChain extends Thread {
 	Postcondition: All objects recieved are added to the NetworkRead queue
 	*/
 	public void run() {
-		try(Socket endpoint=new Socket(ip, 9942)) {
-				DataInputStream primitiveInputStream=new DataInputStream(endpoint.getInputStream());
-				ObjectInputStream objectInputStream=new ObjectInputStream(endpoint.getInputStream());
-				for(int i=0; i<primitiveInputStream.readInt(); i++) {
-					NetworkRead.add((Block) objectInputStream.readObject());
+		try(Socket endpoint=new Socket(ip, 9942)) { //Opens a connection to the ip
+				DataInputStream primitiveInputStream=new DataInputStream(endpoint.getInputStream()); //DataInputStream to the Socket. Allows us to read primitive data
+				ObjectInputStream objectInputStream=new ObjectInputStream(endpoint.getInputStream()); //ObjectInputStream to the Socket. Allows us to read objects, such as blocks
+				for(int i=0; i<primitiveInputStream.readInt(); i++) { //Gets the number of blocks being transferred. Runs one for each block to be transferred,
+					NetworkRead.add((Block) objectInputStream.readObject()); //Reads the object, casts it to a block, and passes it to NetworkRead to be handled appropriately
 				}
 		} catch(Exception e) {
 			System.out.println(e);

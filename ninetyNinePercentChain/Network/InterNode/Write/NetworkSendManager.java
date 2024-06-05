@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import ninetyNinePercentChain.Network.NodeIP;
 
 public class NetworkSendManager {
-	private static ArrayList<NetworkSend> networkSends=new ArrayList<NetworkSend>();
+	private static ArrayList<NetworkSend> networkSends=new ArrayList<NetworkSend>(); //List of all the connections to other nodes.
 	/*
 	Name: update
 	Description: Checks if each IP address coresponds to a IP address in the networkSends list. If there is already a network send for the ip, we skip this ip. If not, we create a new NetworkSend and add it to the list. We also check that each NetworkSend in networkSends's ip is in NodeIP. If it is not there, we remove the NetworkSend.  
@@ -12,24 +12,29 @@ public class NetworkSendManager {
 	Postcondition: All IPs in NodeIP have a connection in networkSends
 	*/
 	public static void update() {
-		for(int i=0; i<NodeIP.getSize(); i++) { //For each IP in NodeIP
-			for(int ii=0; ii<networkSends.size(); ii++) { //Compare the current IP in NodeIP to each of the IPs in networkSends
-				if(networkSends.get(ii).getIP().equalsIgnoreCase(NodeIP.getIP(i))) { //IP in NodeIP is already in networkSends
-					break;
+		for(int i=0; i<NodeIP.getSize(); i++) { //For each IP in NodeIP,
+			boolean exists=false; //Tracks if we have a connection for this IP in NodeIP's list
+			for(int ii=0; ii<networkSends.size(); ii++) { //For each NetworkSend object,
+				if(networkSends.get(ii).getIP().equalsIgnoreCase(NodeIP.getIP(i))) { //If the current NetworkSend's IP matches the current IP in NodeIP's list, 
+					exists=true; //We have a connection
+					break; //No further checks needed
 				}
 			}
-			networkSends.add(new NetworkSend(NodeIP.getIP(i)));
+			if(!exists){ //If the IP does not have a connection,
+				networkSends.add(new NetworkSend(NodeIP.getIP(i))); //Creates a new NetworkSend object with the ip
+				networkSends.get(networkSends.size()-1).start(); //Starts the new thread
+			}
 		}
-		for(int i=0; i<networkSends.size(); i++) { //For each IP in networkSends
-			boolean foundIP=false;
-			for(int ii=0; ii<NodeIP.getSize(); ii++) { //Compare the current IP with each IP in NodeIP
-				if(networkSends.get(i).getIP().equalsIgnoreCase(NodeIP.getIP(ii))) {
-					foundIP=true;
-					break;
+		for(int i=0; i<networkSends.size(); i++) { //For each IP in networkSends,
+			boolean foundIP=false; //Default flag to false
+			for(int ii=0; ii<NodeIP.getSize(); ii++) { //For each IP in NodeIP,
+				if(networkSends.get(i).getIP().equalsIgnoreCase(NodeIP.getIP(ii))) { //If the IP of the NetworkSend and the IP we are searching for are the same,
+					foundIP=true; //Sets foundIP flag to true. This prevents the IP from being removed
+					break; //No more checks needed
 				}
 			}
-			if(!foundIP) {
-				networkSends.remove(i); //If we can't find the IP in networkSends in NodeIP, we should remove the ip because it is no longer active
+			if(!foundIP) { //If we didn't find the ip,
+				networkSends.remove(i); //We should remove the ip because it is no longer active
 			}
 		}
 	}
@@ -40,8 +45,8 @@ public class NetworkSendManager {
 	Postcondition: Object is sent to all the endpoints in networkSends
 	*/
 	public static void addToQueue(Object toSend) {
-		for(int i=0; i<networkSends.size(); i++) {
-			networkSends.get(i).addToQueue(toSend);
+		for(int i=0; i<networkSends.size(); i++) { //For each connection we have,
+			networkSends.get(i).addToQueue(toSend); //Add the object to the queue of objects to send
 		}
 	}
 	/*
@@ -51,8 +56,8 @@ public class NetworkSendManager {
 	Postcondition: All threads stopped
 	*/
 	public static void stopThreads() {
-		for(int i=0; i<networkSends.size(); i++) {
-			networkSends.get(i).stopThread();
+		for(int i=0; i<networkSends.size(); i++) { //For each connection we have,
+			networkSends.get(i).stopThread(); //Tells the connection to stop it's thread
 		}
 	}
 }

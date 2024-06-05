@@ -2,7 +2,7 @@ package ninetyNinePercentChain.Network.InterNode.Sync;
 import java.net.ServerSocket;
 
 public class SyncChainResponseManager extends Thread {
-	private boolean continueRunning=true;
+	private boolean continueRunning=true; //Controls if the thread should continue running
 	/*
 	Name: run
 	Description: Listens for incoming socket connections. Accepts the connection and creates a new thread to handle it.
@@ -10,9 +10,9 @@ public class SyncChainResponseManager extends Thread {
 	Postcondition: Any incoming socket connections are accepted and handled in a new thread
 	*/
 	public void run() {
-		try(ServerSocket endpoint=new ServerSocket(9942)) {
-			while(continueRunning) {
-				new SyncChainResponder(endpoint.accept()).start();
+		try(ServerSocket endpoint=new ServerSocket(9942)) { //Listens for connections,
+			while(continueRunning) { //While the thread should continue running,
+				new SyncChainResponder(endpoint.accept()).start(); //Accepts the connection and starts a new thread to handle it
 			}
 		} catch(Exception e) {
 			System.out.println(e);
@@ -25,6 +25,6 @@ public class SyncChainResponseManager extends Thread {
 	Postcondition: Thread stopped.
 	*/
 	public void stopThread() {
-		continueRunning=false;
+		continueRunning=false; //Sets continue running flag to false
 	}
 }
