@@ -15,10 +15,10 @@ public class Sign {
 	*/
 	public static byte[] privateKeySign(byte[] toSign, PrivateKey privateKey) {
 		try {
-			Signature signature = Signature.getInstance("SHA256WithDSA");
-			signature.initSign(privateKey);
-			signature.update(toSign);
-			return signature.sign();
+			Signature signature = Signature.getInstance("SHA256WithDSA"); //Gets the algorithm
+			signature.initSign(privateKey); //Prepares the algorithm to sign with the private key
+			signature.update(toSign); //Gives the algorithm the data to sign
+			return signature.sign(); //Signs the data and returns the output
 		} catch(Exception e) {
 			System.out.println(e);
 			return null;
@@ -31,14 +31,14 @@ public class Sign {
 	Postcondition: toSign is signed with the key and returned.
 	*/
 	public static byte[] privateKeySign(byte[] toSign, String keyName) {
-		return privateKeySign(toSign, KeyPairManager.readKey(keyName).getPrivate());
+		return privateKeySign(toSign, KeyPairManager.readKey(keyName).getPrivate()); //Reads the key and passes through to the other method
 	}
 	public static byte[] publicKeySign(byte[] toSign, PublicKey publicKey) {
 		try {
-			Signature signature = Signature.getInstance("SHA256WithDSA");
-			signature.initVerify(publicKey);
-			signature.update(toSign);
-			return signature.sign();
+			Signature signature = Signature.getInstance("SHA256WithDSA"); //Gets the algorithm
+			signature.initVerify(publicKey); //Prepares the algorithm to sign the signature with the public key
+			signature.update(toSign); //Passes the signature
+			return signature.sign(); //Signs the signature with the public key. This should reverse the private key and return the original data.
 		} catch(Exception e) {
 			System.out.println(e);
 			return null;

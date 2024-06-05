@@ -55,7 +55,11 @@ public class NetworkInterface {
 			transactionOuts=new TransactionOut[] {new TransactionOut(outKey.getEncoded(), value), new TransactionOut(keyPair.getPublic().getEncoded(), totalValue-value)};
 		}
 		Transaction transaction=new Transaction(transactionIns, transactionOuts, System.currentTimeMillis());
-		transaction.signTransaction(new String[] {keyName});
+		String[] keys=new String[transactionIns.length];
+		for(int i=0; i<keys.length; i++) {
+			keys[i]=keyName;
+		}
+		transaction.signTransaction(keys);
 		NetworkSendManager.addToQueue((Object) transaction);
 	}
 	/*

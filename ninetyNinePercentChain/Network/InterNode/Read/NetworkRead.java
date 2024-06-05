@@ -16,15 +16,15 @@ public class NetworkRead {
 	Postcondition: Input object handled appropriately
 	*/
 	public static void add(Object toAdd) {
-		if(toAdd.getClass()==Transaction.class) {
-			if(CheckValidity.checkTransaction((Transaction) toAdd)&&hashing) {
-				FindBlockHashManager.addTransaction((Transaction) toAdd);
-			}
-		} else if(toAdd.getClass()==Block.class) {
-			if(CheckValidity.checkBlock((Block) toAdd)) {
-				BlockFile.writeBlock((Block) toAdd);
-				if(!hashing) {
-					WaitForTransactionManager.update((Block) toAdd);
+		if(toAdd.getClass()==Transaction.class) { //If the object is a transaction
+			if(CheckValidity.checkTransaction((Transaction) toAdd)&&hashing) { //If we have hashing on and the Transaction is valid,
+				FindBlockHashManager.addTransaction((Transaction) toAdd);  //Pass the transaction to the FindBlockHashManager
+			} //If hashing is off, we just ignore the transaction
+		} else if(toAdd.getClass()==Block.class) { //If the object is a Block,
+			if(CheckValidity.checkBlock((Block) toAdd)) { //If the block is valid,
+				BlockFile.writeBlock((Block) toAdd); //Write the block to our local copy of the blockchain
+				if(!hashing) { //If we don't have hashing on,
+					WaitForTransactionManager.update((Block) toAdd); //Update the WaitForTransactionManager of a new block
 				}
 			}
 		}

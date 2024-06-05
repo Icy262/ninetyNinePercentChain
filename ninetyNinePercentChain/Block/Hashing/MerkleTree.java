@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import ninetyNinePercentChain.Utils.ByteArray;
 import ninetyNinePercentChain.Utils.SHA256Hash;
 
-public class MerkleTree<T extends MerkleTreeable> {
+public class MerkleTree<T extends MerkleTreeable> { //MerkleTree can be made of any object, as long as it implements the MerkleTreeable interface
 	private ArrayList<byte[]> hash; //This stores the input byte[]s and as we begin to merge the byte[]s together and hash them, it stores the process work
 	/*
 	Name: genTree
@@ -13,12 +13,12 @@ public class MerkleTree<T extends MerkleTreeable> {
 	Postcondition: Returns the Merkle root hash of the tree.
 	*/
 	public byte[] genTree() {
-		while(hash.size()>1) {
-			balanceTree();
-			for(int i=0; i<hash.size()/2; i++) {
-				hash.set(i, SHA256Hash.hash(ByteArray.merge(hash.get(i*2), hash.get((i*2)+1))));
+		while(hash.size()>1) { //While there is still more than 2 hashes,
+			balanceTree(); //Balance the tree so that there is an even number of hashes
+			for(int i=0; i<hash.size()/2; i++) { //For each hash pair of hashes,
+				hash.set(i, SHA256Hash.hash(ByteArray.merge(hash.get(i*2), hash.get((i*2)+1)))); //Merge hash index i*2 with the subsequent hash. Hash this merged byte[] and write it to index i.
 			}
-			trimList();
+			trimList(); //Remove the extra values. The second half of the array is garbage.
 		}
 		return hash.get(0);
 	}
@@ -29,8 +29,8 @@ public class MerkleTree<T extends MerkleTreeable> {
 	Postcondition: If the number of hashes is odd, duplicates the last hash to make it even.
 	*/
 	private void balanceTree() { //Makes number of inputs even
-		if(hash.size()%2==1) {
-			hash.add(hash.get(hash.size()-1));
+		if(hash.size()%2==1) { //If there is an odd number of hashes,
+			hash.add(hash.get(hash.size()-1)); //Duplicate the last hash to make it even
 		}
 	}
 	/*
@@ -40,9 +40,9 @@ public class MerkleTree<T extends MerkleTreeable> {
 	Postcondition: Second half of the hash list removed
 	*/
 	private void trimList() {
-		int amountToChop=hash.size()/2;
-		for(int i=hash.size()-1; i>=amountToChop; i--) {
-			hash.remove(i);
+		int amountToChop=hash.size()/2; //Number of hashes to remove. This is half of the array
+		for(int i=hash.size()-1; i>=amountToChop; i--) { //For each hash we should remove, (We iterate negatively because if not, removing an index would affect all subsequent indexes. Removing the last element avoids this issue)
+			hash.remove(i); //Removes hash i
 		}
 	}
 	/*
@@ -52,9 +52,9 @@ public class MerkleTree<T extends MerkleTreeable> {
 	Postcondition: The ArrayList of input objects has been hashed and stored in the ArrayList of byte[]s.
 	*/
 	public MerkleTree(ArrayList<T> toHash) {
-		hash=new ArrayList<byte[]>();
-		for(int i=0; i<toHash.size(); i++) {
-			hash.add(i, toHash.get(i).hash());
+		hash=new ArrayList<byte[]>(); //Array list of byte[]. This will hold the hashes
+		for(int i=0; i<toHash.size(); i++) { //For each value in toHash,
+			hash.add(i, toHash.get(i).hash()); //We hash the generic and write the resulting byte[] to hash
 		}
 	}
 }

@@ -14,11 +14,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
 public class Transaction implements Serializable, MerkleTreeable {
-	private TransactionIn[] TIN; //Not in header
-	private TransactionOut[] TOUT; //Not in header
-	private byte[] merkleRoot; //Header
-	private long timestamp=System.currentTimeMillis(); //Header
-	private byte[][] signature; //Not in header. Contains the merkle root signed by each of the TIN private keys.
+	private TransactionIn[] TIN; //Not in header. All input transactions. Each TIN maps to a TOUT in an old transaction.
+	private TransactionOut[] TOUT; //Not in header. All output transactions. Specifies the amount and future spender.
+	private byte[] merkleRoot; //Header. Merkle root of the TINs and TOUTs. Prevents any changes to them eg. someone changing where the tokens get sent.
+	private long timestamp=System.currentTimeMillis(); //Header. The time the transaction was created at.
+	private byte[][] signature; //Not in header. Contains the merkle root signed by each of the TIN private keys. Protects the merkle root from being changed without permission of all spenders. This prevents a person from changing the address the tokens are spend to, for example.
 	/*
 	Name: Transaction
 	Description: Constructor. Sets the values of our TINs, TOUTs, and our timestamp
@@ -26,9 +26,9 @@ public class Transaction implements Serializable, MerkleTreeable {
 	Postcondition: TIN, TOUT, and timestamp initalized to the specified values
 	*/
 	public Transaction(TransactionIn[] TIN, TransactionOut[] TOUT, long timestamp) {
-		this.TIN=TIN;
-		this.TOUT=TOUT;
-		this.timestamp=timestamp;
+		this.TIN=TIN; //Transactions in
+		this.TOUT=TOUT; //Transactions out
+		this.timestamp=timestamp; //Timestamp of this transaction
 	}
 	/*
 	Name: hash
@@ -37,7 +37,7 @@ public class Transaction implements Serializable, MerkleTreeable {
 	Postcondition: SHA256 hash of the header returned. The same output value will always be returned for the same header values. 
 	*/
 	public byte[] hash() {
-		return SHA256Hash.hash(headerAsByteArray());
+		return SHA256Hash.hash(headerAsByteArray()); //Converts header to byte array and hashes it with SHA256
 	}
 	/*
 	Name: headerAsByteArray
@@ -47,13 +47,13 @@ public class Transaction implements Serializable, MerkleTreeable {
 	*/
 	public byte[] headerAsByteArray() {
 		try {
-			ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream();
-			DataOutputStream longWriter=new DataOutputStream(headerAsByteArray);
+			ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream(); //The ByteArrayOutputStream. This lets us easily combine a long and byte[] together.
+			DataOutputStream longWriter=new DataOutputStream(headerAsByteArray); //DataOutputStream. Lets us write longs to the byte array. ByteArrayOutputStream does not contain a method to write longs.
 			longWriter.writeLong(timestamp);
-			longWriter.flush();
-			genMerkleRoot();
-			headerAsByteArray.write(merkleRoot);
-			return headerAsByteArray.toByteArray();
+			longWriter.close(); //Flushes the stream and closes the output stream. This ensures all data is written and that we prevent resource leaks.
+			genMerkleRoot(); //Automatically generates the merkle root. This ensures that the merkle root has been initialized
+			headerAsByteArray.write(merkleRoot); //Writes the merkle root to the header
+			return headerAsByteArray.toByteArray(); //Writes the stream to a byte array and returns it
 		} catch(Exception e) {
 			System.out.println(e);
 			return null;
@@ -66,17 +66,10 @@ public class Transaction implements Serializable, MerkleTreeable {
 	Postcondition: signatures is generated
 	*/
 	public void signTransaction(String[] keyNames) {
-		signature=new byte[TIN.length][32];
-		if(keyNames.length==1) {
-			String bufferKeyName=keyNames[0];
-			keyNames=new String[TIN.length];
-			for(int i=0; i<keyNames.length; i++) {
-				keyNames[i]=bufferKeyName;
-			}
-		}
+		signature=new byte[TIN.length][32]; //Sets the signature field to a 2d byte array with one 32 byte array per TIN
 		try {
-			for(int i=0; i<TIN.length; i++) {
-				signature[i]=Sign.privateKeySign(headerAsByteArray(), KeyPairManager.readKey(keyNames[i]).getPrivate());
+			for(int i=0; i<TIN.length; i++) { //For each TIN,
+				signature[i]=Sign.privateKeySign(headerAsByteArray(), KeyPairManager.readKey(keyNames[i]).getPrivate()); //Sign the header with our private key
 			}
 		} catch(Exception e) {
 			System.out.println(e);
@@ -89,7 +82,7 @@ public class Transaction implements Serializable, MerkleTreeable {
 	Postcondition: The merkle root field in the Transaction has been set
 	*/
 	private void genMerkleRoot() {
-		merkleRoot=ByteArray.merge(new MerkleTree<TransactionIn>(new ArrayList<TransactionIn>(Arrays.asList(TIN))).genTree(), new MerkleTree<TransactionOut>(new ArrayList<TransactionOut>(Arrays.asList(TOUT))).genTree());
+		merkleRoot=ByteArray.merge(new MerkleTree<TransactionIn>(new ArrayList<TransactionIn>(Arrays.asList(TIN))).genTree(), new MerkleTree<TransactionOut>(new ArrayList<TransactionOut>(Arrays.asList(TOUT))).genTree()); //Generates the merkle roots of the TINs and OUTS, then merges them together
 	}
 	/*
 	Name: getMerkleRoot

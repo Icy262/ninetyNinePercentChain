@@ -15,13 +15,10 @@ public class NetworkReceiveHandler extends Thread {
 	Postcondition: None
 	*/
 	public void run() {
-		try(ServerSocket endpoint=new ServerSocket(9938)) {
-			while(continueRunning) {
-				networkReceiver.add(new NetworkReceive(endpoint.accept()));
-				networkReceiver.get(networkReceiver.size()-1).start();
-			}
-			for(int i=0; i<networkReceiver.size(); i++) {
-				networkReceiver.get(i).stopThread();
+		try(ServerSocket endpoint=new ServerSocket(9938)) { //Creates a ServerSocket to listen for incoming connections
+			while(continueRunning) { //While we should continue running,
+				networkReceiver.add(new NetworkReceive(endpoint.accept())); //Accepts any incoming connections
+				networkReceiver.get(networkReceiver.size()-1).start(); //Starts a new thread to handle the connection
 			}
 		} catch(Exception e) {
 			System.out.println(e);
@@ -34,7 +31,7 @@ public class NetworkReceiveHandler extends Thread {
 	Postcondition: NetworkRead hashing flag set to the value of hashing
 	*/
 	public NetworkReceiveHandler(boolean hashing) {
-		NetworkRead.setHashing(hashing);
+		NetworkRead.setHashing(hashing); //Sets the hashing flag for NetworkRead 
 	}
 	/*
 	Name: stopThread
@@ -43,6 +40,9 @@ public class NetworkReceiveHandler extends Thread {
 	Postcondition: continueRunning flag set to false. Thread will stop.
 	*/
 	public void stopThread() {
-		continueRunning=false;
+		continueRunning=false; //Sets continueRunning flag to false
+		for(int i=0; i<networkReceiver.size(); i++) { //For each connection,
+			networkReceiver.get(i).stopThread(); //Close the connection
+		}
 	}
 }

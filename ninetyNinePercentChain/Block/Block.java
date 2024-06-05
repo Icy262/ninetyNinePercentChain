@@ -10,12 +10,12 @@ import java.io.DataOutputStream;
 import java.io.Serializable;
 
 public class Block implements Serializable, MerkleTreeable {
-	private int index;
-	private long timestamp;
-	private long nonce=0; //index 12-20
-	private byte[] previousHash=new byte[32];
+	private int index; //Header. Index number of the block. This lets us find specific blocks, and to tell the order of blocks and transactions
+	private long timestamp; //Header. Time the block was created at
+	private long nonce=0; //Allows us to change the hash without changing the data stored inside. This allows us to find hashes with specific numbers of leading zeros. Takes up index 12-20 in headerAsByteArray
+	private byte[] previousHash; //The previous hash. This prevents someone from going back and changing one of the old blocks
 	private byte[] merkleRoot; //Merkle root of the transactions
-	private ArrayList<Transaction> transactions=new ArrayList<Transaction>(); //Body
+	private ArrayList<Transaction> transactions=new ArrayList<Transaction>(); //Body. Stores all the transactions in the block.
 	/*
 	Name: headerAsByteArray
 	Description: Converts the header to a byte array. This is so that the header can be hashed eg. for merkle trees.
@@ -24,15 +24,15 @@ public class Block implements Serializable, MerkleTreeable {
 	*/
 	public byte[] headerAsByteArray() {
 		try {
-			ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream();
-			DataOutputStream longWriter=new DataOutputStream(headerAsByteArray);
+			ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream(); //Creates a ByteArrayOutputStream. This makes it easier to combine ints, longs, and byte[] all into one array
+			DataOutputStream longWriter=new DataOutputStream(headerAsByteArray); //Allows us to easily convert a long to a byte[]. ByteArrayOutputStream does not have a method for writing longs.
 			headerAsByteArray.write(index);
 			longWriter.writeLong(timestamp);
 			longWriter.writeLong(nonce);
-			longWriter.flush();
+			longWriter.close(); //Flushes all data out of the output stream and then closes it. This ensures there are no memory leaks or lost data. 
 			headerAsByteArray.write(previousHash);
 			headerAsByteArray.write(merkleRoot);
-			return headerAsByteArray.toByteArray();
+			return headerAsByteArray.toByteArray(); //Puts all the data in the ByteArrayOutputStream into a byte array and returns it
 		} catch(Exception e) {
 			System.out.println(e);
 			return null;
@@ -45,8 +45,9 @@ public class Block implements Serializable, MerkleTreeable {
 	Postcondition: Header hashed with SHA256 and returned. Same header values will always produce the same output.
 	*/
 	public byte[] hash() {
-		return SHA256Hash.hash(headerAsByteArray());
+		return SHA256Hash.hash(headerAsByteArray()); //Converts header to byte array and hashes it.
 	}
+	//THIS USED TO BE IMPORTANT, BUT IT IS NO LONGER NEEDED BECAUSE WE DON'T REQUIRE ANY LEADING ZEROS ANYMORE. THIS WAS DISABLED TO IMPROVE TRANSACTION PROCESSING SPEED
 	// /*
 	// Name: checkHashZeros
 	// Description: Checks if the number of zeros in the hash meets the standard set by the config
@@ -68,7 +69,7 @@ public class Block implements Serializable, MerkleTreeable {
 	Postcondition: The merkle root field in the header is set
 	*/
 	public void genMerkleRoot() {
-		merkleRoot=new MerkleTree<Transaction>(transactions).genTree();
+		merkleRoot=new MerkleTree<Transaction>(transactions).genTree(); //Creates a new merkle tree object and passes the transactions to process. Generates the tree and returns it.
 	}
 	/*
 	Name: Block
@@ -77,11 +78,11 @@ public class Block implements Serializable, MerkleTreeable {
 	Postcondition: All values initialized and the merkle root generated
 	*/
 	public Block(int index, long timestamp, byte[] previousHash, ArrayList<Transaction> transactions) {
-		this.index=index;
-		this.timestamp=timestamp;
-		this.previousHash=previousHash;
-		this.transactions=transactions;
-		genMerkleRoot();
+		this.index=index; //Block index. Should be one greater than the previous block
+		this.timestamp=timestamp; //Time the block was created
+		this.previousHash=previousHash; //Previous hash of the block. This prevents anyone from changing the previous block later.
+		this.transactions=transactions; //All the transactions contained in this block. Can be empty to start as long as the object has been created.
+		genMerkleRoot(); //Generates the merkle root. To ensure that it is initalized.
 	}
 	/*
 	Name: addTransaction
@@ -90,8 +91,8 @@ public class Block implements Serializable, MerkleTreeable {
 	Postcondition: toAdd added to the list of transactions and merkle root updated
 	*/
 	public void addTransaction(Transaction toAdd) {
-		transactions.add(toAdd);
-		genMerkleRoot();
+		transactions.add(toAdd); //Adds the transaction to the list
+		genMerkleRoot(); //Regens the Merkle Root. This changes with any change in the Transaction list, so we need to update it
 	}
 	/*
 	Name: getIndex

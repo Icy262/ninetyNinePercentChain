@@ -24,10 +24,10 @@ public class TransactionOut implements MerkleTreeable {
 	Postcondition: The header is converted to a byte array in a consistent manner and returned
 	*/
 	public byte[] toByteArray() {
-		ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream();
+		ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream(); //ByteArrayOutputStream. Allows us to easily combine ints and byte[].
 		headerAsByteArray.writeBytes(nextTransactionPublicKey);
 		headerAsByteArray.write(value);
-		return headerAsByteArray.toByteArray();
+		return headerAsByteArray.toByteArray(); //Writes the output stream to a byte array and returns it
 	}
 	/*
 	Name: getValue
@@ -54,7 +54,7 @@ public class TransactionOut implements MerkleTreeable {
 	Postcondition: All values set
 	*/
 	public TransactionOut(byte[] nextTransactionPublicKey, int value) {
-		this.nextTransactionPublicKey=nextTransactionPublicKey;
-		this.value=value;
+		this.nextTransactionPublicKey=nextTransactionPublicKey; //The address we are sending the token to
+		this.value=value; //The amount of tokens to send
 	}
 }

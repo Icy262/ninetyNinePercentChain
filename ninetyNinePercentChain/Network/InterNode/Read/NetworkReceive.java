@@ -13,9 +13,9 @@ class NetworkReceive extends Thread {
 	*/
 	public void run() {
 		try {
-			ObjectInputStream endpointInputStream=new ObjectInputStream(endpoint.getInputStream());
-			while(continueRunning) {
-				NetworkRead.add(endpointInputStream.readObject());
+			ObjectInputStream endpointInputStream=new ObjectInputStream(endpoint.getInputStream()); //Creates a new ObjectInputStream with the node
+			while(continueRunning) { //While the thread should continue running,
+				NetworkRead.add(endpointInputStream.readObject()); //Read any object coming over the network and pass it to the handler.
 			}
 		} catch(Exception e) {
 			System.out.println(e);

@@ -19,7 +19,7 @@ public class TransactionIn implements MerkleTreeable {
 	Postcondition: Header converted to a byte array and hashed with SHA256. The header values should always produce the same hash.
 	*/
 	public byte[] hash() {
-		return SHA256Hash.hash(toByteArray());
+		return SHA256Hash.hash(toByteArray()); //Converts the TIN to a byte array and hashes it
 	}
 	/*
 	Name: toByteArray
@@ -28,11 +28,11 @@ public class TransactionIn implements MerkleTreeable {
 	Postcondition: Header converted to a byte array in a deterministic manner.
 	*/
 	public byte[] toByteArray() {
-		ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream();
+		ByteArrayOutputStream headerAsByteArray=new ByteArrayOutputStream(); //ByteArrayOutputStream. Makes it easy to combine all the ints into a single byte[]
 		headerAsByteArray.write(previousOutBlock);
 		headerAsByteArray.write(previousOutTransaction);
 		headerAsByteArray.write(previousOutOutputNumber);
-		return headerAsByteArray.toByteArray();
+		return headerAsByteArray.toByteArray(); //Writes the stream to a byte array and returns it
 	}
 	/*
 	Name: sign
@@ -41,7 +41,7 @@ public class TransactionIn implements MerkleTreeable {
 	Postcondition: privateKeySignature value set.
 	*/
 	public void sign(String keyName) {
-		privateKeySignature=Sign.privateKeySign(toByteArray(), keyName);
+		privateKeySignature=Sign.privateKeySign(toByteArray(), keyName); //Signs the TransactionIn with the private key named keyName
 	}
 	/*
 	Name: sign
@@ -50,7 +50,7 @@ public class TransactionIn implements MerkleTreeable {
 	Postcondition: privateKeySignature value set.
 	*/
 	public void sign(PrivateKey key) {
-		privateKeySignature=Sign.privateKeySign(toByteArray(), key);
+		privateKeySignature=Sign.privateKeySign(toByteArray(), key); //Signs the TransactionIn with the private key
 	}
 	/*
 	Name: getPreviousOutBlock
@@ -95,19 +95,17 @@ public class TransactionIn implements MerkleTreeable {
 	Postcondition: Constructs the object and sets the values in the header
 	*/
 	public TransactionIn(int previousOutBlock, int previousOutTransaction, int previousOutOutputNumber) {
-		this.previousOutBlock=previousOutBlock;
-		this.previousOutTransaction=previousOutTransaction;
-		this.previousOutOutputNumber=previousOutOutputNumber;
+		this.previousOutBlock=previousOutBlock; //Index of the block that has the TOUT
+		this.previousOutTransaction=previousOutTransaction; //Index of the Transaction that has the TOUT
+		this.previousOutOutputNumber=previousOutOutputNumber; //Index of the TOUT we reference
 	}
 	/*
 	Name: getValue
-	Description: Opens the block we reference, find the transaction, and gets the value of the TOUT that this TIN references
+	Description: Gets the value of the TOUT that this TIN references
 	Precondition: previousOutBlock, previousOutTransaction, and previousOutOutput number are all initalized and valid
 	Postcondition: The value of the TOUT that this TIN references returned
 	*/
 	public int getValue() {
-		Block block=BlockFile.readBlock(previousOutBlock); //The block that stores the previous output transaction
-		Transaction transaction=block.getTransaction(previousOutTransaction); //The transaction the holds the previous output transaction
-		return transaction.getTOUT(previousOutOutputNumber).getValue();
+		return BlockFile.getTOUT(previousOutBlock, previousOutTransaction, previousOutOutputNumber).getValue(); //Returns the value of the TOUT we reference 
 	}
 }

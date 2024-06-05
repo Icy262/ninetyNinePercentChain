@@ -17,10 +17,10 @@ public class FindBlockHashManager {
 	Postcondition: Valid block written to the blockchain directory, and added to the network queue
 	*/
 	public static void validBlockFound(Block validBlock) {
-		BlockFile.writeBlock(validBlock);
-		NetworkSendManager.addToQueue(validBlock);
-		block=null;
-		search=null;
+		BlockFile.writeBlock(validBlock); //Write the block to the blockchain directory
+		NetworkSendManager.addToQueue(validBlock); //Send the block out to the other nodes
+		block=null; //Clear the block
+		search=null; //Clear the search thread
 	}
 	/*
 	Name: addTransaction
@@ -29,15 +29,15 @@ public class FindBlockHashManager {
 	Postcondition: newTransaction is added to the block and the search thread is restarted
 	*/
 	public static void addTransaction(Transaction newTransaction) {
-		if(search!=null) {
-			search.interrupt();
+		if(search!=null) { //If there is a search thread running,
+			search.stopThread(); //Sets continue running flag to false. This stops the thread
 		}
-		if(block!=null) {
-			block.addTransaction(newTransaction);
-		} else {
-			block=new Block(BlockFile.getHighestIndex()+1, System.currentTimeMillis(), BlockFile.readBlock(BlockFile.getHighestIndex()-1).hash(), new ArrayList<Transaction>());
-			block.addTransaction(newTransaction);
+		if(block!=null) { //If there is a block already being processed,
+			block.addTransaction(newTransaction); //Add the transaction
+		} else { //If there is no block,
+			block=new Block(BlockFile.getHighestIndex()+1, System.currentTimeMillis(), BlockFile.readBlock(BlockFile.getHighestIndex()-1).hash(), new ArrayList<Transaction>()); //Create new block. Index is one greater than previous, timestamp is now, previousblockhash is the hash of the previous block. The ArrayList of transactions is empty.
+			block.addTransaction(newTransaction); //Adds the new transaction
 		}
-		search=new FindBlockHash(block, 16);
+		search=new FindBlockHash(block, 16); //Restarts the search thread.
 	}
 }

@@ -14,12 +14,12 @@ public class KeyPairManager {
 	*/
 	public static KeyPair readKey(String keyName) {
 		try {
-			FileInputStream keyFile=new FileInputStream("./keys/"+keyName+".ser");
-			ObjectInputStream keyReader=new ObjectInputStream(keyFile);
-			KeyPair key=(KeyPair) keyReader.readObject();
-			keyReader.close();
-			keyFile.close();
-			return key;
+			FileInputStream keyFile=new FileInputStream("./keys/"+keyName+".ser"); //Opens the file
+			ObjectInputStream keyReader=new ObjectInputStream(keyFile); //Opens a object input stream on top of the FileInputStream
+			KeyPair key=(KeyPair) keyReader.readObject(); //Reads the key from the file and casts it to a KeyPair
+			keyReader.close(); //Closes the ObjectInputStream
+			keyFile.close(); //Closes the FileInputStream
+			return key; //Returns the key
 		} catch(Exception e) {
 			System.out.println(e);
 			return null;
@@ -33,11 +33,11 @@ public class KeyPairManager {
 	*/
 	public static void writekey(KeyPair toWrite, String keyName) {
 		try {
-			FileOutputStream keyFile=new FileOutputStream("./keys/"+keyName+".ser");
-			ObjectOutputStream keyWriter=new ObjectOutputStream(keyFile);
-			keyWriter.writeObject(toWrite);
-			keyWriter.close();
-			keyFile.close();
+			FileOutputStream keyFile=new FileOutputStream("./keys/"+keyName+".ser"); //Opens a new file with the name keyName.ser
+			ObjectOutputStream keyWriter=new ObjectOutputStream(keyFile); //Opens a new ObjectOutputStream to the file
+			keyWriter.writeObject(toWrite); //Writes the KeyPair
+			keyWriter.close(); //Flushes and closes the ObjectOutputStream
+			keyFile.close(); //Flushes and closes the FileOutputStream
 		} catch(Exception e) {
 			System.out.println(e);
 		}

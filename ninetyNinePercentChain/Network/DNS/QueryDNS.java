@@ -17,19 +17,19 @@ public class QueryDNS extends Thread {
 	Postcondition: IP addresses are added to the NodeIP list.
 	*/
 	public void run() {
-		while(continueThread) {
+		while(continueThread) { //While the continueRunning flag is set to true,
 			try {
-				Socket socket=new Socket(DNSIP, port);
-				ObjectInputStream read=new ObjectInputStream(socket.getInputStream());
-				for(int i=0; i<10; i++) {
-					NodeIP.addIP((String) read.readObject());
+				Socket socket=new Socket(DNSIP, port); //Create a new connection to the DNS server
+				ObjectInputStream read=new ObjectInputStream(socket.getInputStream()); //Open a ObjectInputStream with the server
+				for(int i=0; i<10; i++) { //Repeat 10 times
+					NodeIP.addIP((String) read.readObject()); //Read objects from the DNS server and convert them to Strings. Store the Strings in the NodeIP IP list.
 				}
-				read.close();
-				socket.close();
-				if(NodeIP.getSize()==0) {
-					Thread.sleep(1000);
-				} else {
-					Thread.sleep(600000);
+				read.close(); //Close the reader to prevent resource leaks
+				socket.close(); //Close the socket to save bandwith and resources
+				if(NodeIP.getSize()==0) { //If we don't have any other node's IPs,
+					Thread.sleep(1000); //Wait one second and try again. We wait for a second to prevent excessive network traffic.
+				} else { //We have some IPs,
+					Thread.sleep(600000); //Check in again in 10 minutes
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
