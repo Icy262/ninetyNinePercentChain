@@ -22,26 +22,26 @@ public class CheckValidity {
 	*/
 	public static boolean checkBlock(Block toCheck) {
 		try {
-			if(!(new File("./blockchain/"+toCheck.getIndex()+".ser").exists()&&BlockFile.readBlock(toCheck.getIndex()).equals(toCheck))) {
-				return false;
-			} else if(!Arrays.equals(BlockFile.readBlock(toCheck.getIndex()-1).hash(), toCheck.getPreviousHash())) {
-				return false;
-			} else if(!Arrays.equals(toCheck.getMerkleRoot(), new MerkleTree<Transaction>(toCheck.getAllTransactions()).genTree())) {
-				return false;
-			} if(toCheck.getIndex()<=0) {
-				return false;
-			} if(toCheck.getAllTransactions().size()==0) {
-				return false;
+			if(!(new File("./blockchain/"+toCheck.getIndex()+".ser").exists())) { //If the block already exists,
+				return false; //We don't need to check this block, because we already have it
+			} else if(!Arrays.equals(BlockFile.readBlock(toCheck.getIndex()-1).hash(), toCheck.getPreviousHash())) { //If the previous block hash field does not match the previous block's hash,
+				return false; //Return false. These should match
+			} else if(!Arrays.equals(toCheck.getMerkleRoot(), new MerkleTree<Transaction>(toCheck.getAllTransactions()).genTree())) { //If the value of the block's merkle root field does not match the actual merkle root,
+				return false; //Return false. Something was modified
+			} if(toCheck.getIndex()<1) { //If the block's index is negative or 0,
+				return false; //Negative indexes make no sense. Block 0 is a special block and should not be checked or transferred over the network. It comes included with the source code
+			} if(toCheck.getAllTransactions().size()==0) { //If there are no transactions,
+				return false; //Ignore the block. It is garbage.
 			}
-			for(int i=0; i<toCheck.getNumTransactions(); i++) {
-				if(!checkTransaction(toCheck.getTransaction(i))) {
-					return false;
+			for(int i=0; i<toCheck.getNumTransactions(); i++) { //For each transaction,
+				if(!checkTransaction(toCheck.getTransaction(i))) { //If any of the transactions is invalid,
+					return false; //The entire block is invalid if there are any invalid transactions
 				}
 			}
-			return true;
+			return true; //Block passed all checks. It is valid.
 		} catch(Exception e) {
 			System.out.println(e);
-			return false;
+			return false; //Some error occured. We should default to invalid because if not we could skirt the validity checks by purposly making invalid blocks.
 		}
 	}
 	/*
