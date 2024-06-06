@@ -9,12 +9,12 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 import ninetyNinePercentChain.Block.Block;
 import ninetyNinePercentChain.Block.Transaction;
 import ninetyNinePercentChain.Block.TransactionIn;
 import ninetyNinePercentChain.Block.TransactionOut;
+import ninetyNinePercentChain.Block.Hashing.CheckValidity;
 import ninetyNinePercentChain.Block.Hashing.FindBlockHashManager;
 import ninetyNinePercentChain.Keys.KeyPairManager;
 import ninetyNinePercentChain.Network.DNS.QueryDNS;
@@ -122,13 +122,14 @@ public class NetworkInterface {
 				Transaction transaction=block.getTransaction(ii); //Buffer for the transaction. Prevents needing to get it multiple times.
 				for(int iii=0; i<transaction.getTOUTLength(); iii++) { //For each TOUT in the transaction,
 					if(Arrays.equals(transaction.getTOUT(iii).getNextTransactionPublicKey(), keyAsByteArray)) { //If the TOUT is giving funds to our address,
-						//ADD CHECK FOR ALREADY SPENT TRANSACTION
-						transactionList.add(new TransactionIn(i, ii, iii)); //Ad a new TIN referencing this TOUT
-						transactionList.get(transactionList.size()-1).sign(privateKey); //Sign the new TIN with our private key
-						addressBalance+=transaction.getTOUT(iii).getValue(); //Add the amount of the TOUT to the accumulator
-						if(addressBalance>=value) { //If we have enough funds,
-							return (TransactionIn[]) transactionList.toArray(); //Return our list of TINs
-						} //If not, keep looking
+						if(!CheckValidity.isTOUTSpent(i, ii, iii)) { //If the TOUT is unspent,
+							transactionList.add(new TransactionIn(i, ii, iii)); //Ad a new TIN referencing this TOUT
+							transactionList.get(transactionList.size()-1).sign(privateKey); //Sign the new TIN with our private key
+							addressBalance+=transaction.getTOUT(iii).getValue(); //Add the amount of the TOUT to the accumulator
+							if(addressBalance>=value) { //If we have enough funds,
+								return (TransactionIn[]) transactionList.toArray(); //Return our list of TINs
+							} //If not, keep looking
+						}
 					}
 				}
 			}
