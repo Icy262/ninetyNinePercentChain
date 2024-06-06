@@ -1,5 +1,6 @@
 package ninetyNinePercentChain.Keys;
 import java.security.KeyPair;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
@@ -33,6 +34,7 @@ public class KeyPairManager {
 	*/
 	public static void writekey(KeyPair toWrite, String keyName) {
 		try {
+			new File("keys").mkdir(); //Makes a new keys directory, if one does not already exist
 			FileOutputStream keyFile=new FileOutputStream("./keys/"+keyName+".ser"); //Opens a new file with the name keyName.ser
 			ObjectOutputStream keyWriter=new ObjectOutputStream(keyFile); //Opens a new ObjectOutputStream to the file
 			keyWriter.writeObject(toWrite); //Writes the KeyPair

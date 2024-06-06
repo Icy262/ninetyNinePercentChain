@@ -25,7 +25,6 @@ public class Main {
 		keepAliveManager.start(); //Starts the KeepAliveManager thread. This will send out keep alive messages to all the IPs in our list every five minutes. If they don't accept the connection within 10 seconds, we delete their ip from our list.
 		networkReceiveHandler.start(); //Starts the NetworkRecieveHandler thread with the hashing flag set to true. This will accept any incoming data and direct it to the hashing manager.
 		syncChainResponseManager.start(); //Starts the SyncChainReponseManager. This will sync our copy of the blockchain with any new IPs that we add to our list.
-		
 		Scanner userInput=new Scanner(System.in); //Scanner.
 		boolean stopProgram=false; //Flag. If false, program continues running. If true, program stops.
 		while(!stopProgram) { //While stopProgram is false.
