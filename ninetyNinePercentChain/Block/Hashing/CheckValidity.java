@@ -94,11 +94,16 @@ public class CheckValidity {
 			if(totalValueInput!=totalValueOutput) {
 				return false;
 			}
-			//CHECK FOR OUTPUT TRANSACTION ALREADY BEING SPENT
-			return true;
+			for(int i=0; i<toCheck.getTINLength(); i++) { //For each TIN,
+				TransactionIn TIN=toCheck.getTIN(i); //Buffer for the TIN. Prevents us from needing to get it multiple times
+				if(isTOUTSpent(TIN.getPreviousOutBlock(), TIN.getPreviousOutTransaction(), TIN.getPreviousOutOutputNumber())) { //If the TOUT referenced by the current TIN has already been spent,
+					return false; //Cannot spend the same TOUT twice
+				}
+			}
+			return true; //All checks passed, so it is valid
 		} catch(Exception e) {
 			System.out.println(e);
-			return false;
+			return false; //Some error, best to assume it is invalid. (If not, we could make transactions that purposely throw errors so they would pass the validity checks)
 		}
 	}
 	/*
