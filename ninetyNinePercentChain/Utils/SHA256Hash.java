@@ -9,13 +9,13 @@ public class SHA256Hash {
 	Postcondition: toHash hashed with SHA256 and value returned.
 	*/
 	public static byte[] hash(byte[] toHash) {
-		byte[] hashedValue=null;
+		byte[] hashedValue=null; //Stores the hash
 		try {
 			MessageDigest digest=MessageDigest.getInstance("SHA-256"); //SHA-256
-			hashedValue=digest.digest(toHash);
+			hashedValue=digest.digest(toHash); //Hashes toHash with SHA256 and stores it in hashedValue
 		} catch(Exception e) {
 			System.out.println(e);
 		}
-		return hashedValue;
+		return hashedValue; //Returns the value of hashedValue
 	}
 }
