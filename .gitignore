@@ -1,4 +1,4 @@
 *.class
 .vscode/
-*.ser
-.keys/
+keys/*
+blockchain/*
