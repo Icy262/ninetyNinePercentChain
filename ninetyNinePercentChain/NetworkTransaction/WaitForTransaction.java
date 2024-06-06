@@ -13,10 +13,10 @@ public class WaitForTransaction {
 	Postcondition: Waits until transaction is included in block we recieve
 	*/
 	public WaitForTransaction(byte[] sendAddress, byte[] recieveAddress, int value) {
-		this.sendAddress=sendAddress;
-		this.recieveAddress=recieveAddress;
-		this.value=value;
-		WaitForTransactionManager.addWait(this);
+		this.sendAddress=sendAddress; //Address sending tokens
+		this.recieveAddress=recieveAddress; //Address recieving the tokens
+		this.value=value; //Amount of tokens
+		WaitForTransactionManager.addWait(this); //Takes this object and adds it to the waiting transactions list
 	}
 	/*
 	Name: startWait
@@ -26,7 +26,7 @@ public class WaitForTransaction {
 	*/
 	public void startWait() {
 		try {
-			wait();
+			wait(); //Waits. This will block the calling method until we are awakened again.
 		} catch(Exception e) {
 			System.out.println(e);
 		}
