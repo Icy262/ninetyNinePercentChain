@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ninetyNinePercentChain.Block.Block;
+import ninetyNinePercentChain.Block.Transaction;
 import ninetyNinePercentChain.Block.TransactionIn;
 import ninetyNinePercentChain.Block.TransactionOut;
 import ninetyNinePercentChain.Utils.BlockFile;
@@ -17,7 +18,7 @@ public class WaitForTransactionManager {
 	Postcondition: WaitForTransaction added to the list of waiting threads
 	*/
 	public static void addWait(WaitForTransaction waiter) {
-		waiting.add(waiter);
+		waiting.add(waiter); //Adds the WaitForTransaction to the list of threads waiting for transactions
 	}
 	/*
 	Name: update
@@ -26,33 +27,32 @@ public class WaitForTransactionManager {
 	Postcondition: Thread notified if its wait condition is met
 	*/
 	public static void update(Block block) {
-		if(waiting.size()==0) {
-			return;
-		}
-		for(int i=0; i<waiting.size(); i++) { //For each transaction waiting,
+		for(int i=0; i<waiting.size(); i++) { //For each thread waiting,
 			for(int ii=0; ii<block.getNumTransactions(); ii++) { //For each transaction in the block,
-				for(int iii=0; i<block.getTransaction(ii).getTOUTLength(); iii++) { //For each TOUT in the transaction,
-					boolean sendAddressMet=false;
-					boolean recieveAddressMet=false;
-					boolean amountMet=false;
-					WaitForTransaction currentWaiting=waiting.get(i);
-					TransactionOut TOUT=block.getTransaction(ii).getTOUT(iii);
-					TransactionIn TIN=block.getTransaction(ii).getTIN(iii);
-					for(int iiii=0; iiii<block.getTransaction(ii).getTINLength(); iiii++) {
-						if(Arrays.equals(BlockFile.getTOUT(TIN.getPreviousOutBlock(), TIN.getPreviousOutTransaction(), TIN.getPreviousOutOutputNumber()).getNextTransactionPublicKey(), currentWaiting.getSendAddress())) {
-							sendAddressMet=true;
-							break;
+				Transaction currentTransaction=block.getTransaction(ii); //The current transaction we are checking. Saves having to get it multiple times
+				boolean sendAddressMet=false;
+				boolean recieveAddressMet=false;
+				boolean amountMet=false;
+				WaitForTransaction currentWaiting=waiting.get(i);
+				for(int iii=0; iii<currentTransaction.getTINLength(); iii++) { //For each TIN,
+					TransactionIn TIN=currentTransaction.getTIN(iii); //Buffer for current TIN we are checking. This saves us from needing to get the TIN multiple times
+					if(Arrays.equals(BlockFile.getTOUT(TIN.getPreviousOutBlock(), TIN.getPreviousOutTransaction(), TIN.getPreviousOutOutputNumber()).getNextTransactionPublicKey(), currentWaiting.getSendAddress())) { //If the TOUT address matches the send address,
+						sendAddressMet=true; //Sets sendAddressMet flag to true
+						break; //Matches, so no need to check the rest of the TINs
+					}
+				}
+				for(int iii=0; iii<currentTransaction.getTOUTLength(); iii++) { //For each TOUT,
+					TransactionOut TOUT=currentTransaction.getTOUT(iii); //Buffer for the current TOUT we are checking. This saves us from needing to get the TOUT multiple times
+					if(Arrays.equals(TOUT.getNextTransactionPublicKey(), currentWaiting.getRecieveAddress())) { //If the recieve address matches the TOUT address,
+						recieveAddressMet=true; //Sets recieveAddressMet flag to true
+						if(TOUT.getValue()==currentWaiting.getValue()) { //If the value of the matching TOUT is the correct value,
+							amountMet=true; //Sets amountMet flag to true
+							break; //Matches, so no need to check the rest of the TOUTs
 						}
 					}
-					if(Arrays.equals(TOUT.getNextTransactionPublicKey(), currentWaiting.getRecieveAddress())) {
-						recieveAddressMet=true;
-					}
-					if(TOUT.getValue()==currentWaiting.getValue()) {
-						amountMet=true;
-					}
-					if(sendAddressMet&&recieveAddressMet&&amountMet) {
-						waiting.get(i).notify();
-					}
+				}
+				if(sendAddressMet&&recieveAddressMet&&amountMet) { //If sender, reciever, and value are all correct,
+					currentWaiting.notify(); //Wakes the thread up, because the transaction has been recieved
 				}
 			}
 		}
