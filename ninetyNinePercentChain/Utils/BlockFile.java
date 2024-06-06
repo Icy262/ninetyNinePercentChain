@@ -22,16 +22,16 @@ public class BlockFile {
 	*/
 	public static Block readBlock(int blockNum) {
 		try {
-			FileInputStream blockFile=new FileInputStream("./blockchain/"+String.valueOf(blockNum)+".ser");
-			ObjectInputStream blockReader=new ObjectInputStream(blockFile);
-			Block block=(Block) blockReader.readObject();
-			blockReader.close();
-			blockFile.close();
-			return block;
+			FileInputStream blockFile=new FileInputStream("./blockchain/"+String.valueOf(blockNum)+".ser"); //Opens a file input stream to the block with the index blockNum
+			ObjectInputStream blockReader=new ObjectInputStream(blockFile); //Opens a object input stream to the file
+			Block block=(Block) blockReader.readObject(); //Reads the block contained in the file
+			blockReader.close(); //Closes the reader to prevent wasted system resouces
+			blockFile.close(); //Closes the file to prevent wasted resouces and locked files
+			return block; //Returns the requested block
 		} catch(Exception e) {
 			System.out.println(e);
 		}
-		return null;
+		return null; //Some error
 	}
 	/*
 	Name: writeBlock
@@ -41,11 +41,11 @@ public class BlockFile {
 	*/
 	public static void writeBlock(Block toWrite) {
 		try {
-			FileOutputStream blockFile=new FileOutputStream("./blockchain/"+String.valueOf(toWrite.getIndex())+".ser");
-			ObjectOutputStream blockWriter=new ObjectOutputStream(blockFile);
-			blockWriter.writeObject(toWrite);
-			blockWriter.close();
-			blockFile.close();
+			FileOutputStream blockFile=new FileOutputStream("./blockchain/"+String.valueOf(toWrite.getIndex())+".ser"); //Opens an output stream to the file
+			ObjectOutputStream blockWriter=new ObjectOutputStream(blockFile); //Opens and object output stream to the file. This lets us write the block
+			blockWriter.writeObject(toWrite); //Writes the block to the store
+			blockWriter.close(); //Closes the stream to prevent wasted resouces and locked files.
+			blockFile.close(); //Closes the file to prevent wasted resources and locked files.
 		} catch(Exception e) {
 			System.out.println(e);
 		}
@@ -58,14 +58,14 @@ public class BlockFile {
 	*/
 	public static boolean blockExists(int index) {
 		try {
-			FileInputStream block=new FileInputStream("./blockchain/"+index+".ser");
-			block.close();
-			return true;
+			FileInputStream block=new FileInputStream("./blockchain/"+index+".ser"); //Tries to read block number index
+			block.close(); //Closes file to prevent locked file and wasted resouces
+			return true; //Files exists, return true
 		} catch(FileNotFoundException e) {
-			return false;
+			return false; //File does not exist
 		} catch(IOException e) {
 			System.out.println(e);
-			return true;
+			return false; //Some other error
 		}
 	}
 	/*
@@ -75,8 +75,8 @@ public class BlockFile {
 	Postcondition: Highest block index returned
 	*/
 	public static int getHighestIndex() {
-		File directory=new File("./blockchain");
-		return directory.listFiles().length-1;
+		File directory=new File("./blockchain"); //Opens the directory as a file
+		return directory.listFiles().length-1; //Gets the number of files and subtracts one. This is because the highest index is one less than the number of files
 	}
 	/*
 	Name: getTransaction
@@ -85,7 +85,7 @@ public class BlockFile {
 	Postcondition: Transaction returned
 	*/
 	public static Transaction getTransaction(int blockIndex, int transactionIndex) {
-		return readBlock(blockIndex).getTransaction(transactionIndex);
+		return readBlock(blockIndex).getTransaction(transactionIndex); //Reads block number blockIndex and gets transaction number transactionIndex
 	}
 	/*
 	Name: getTIN
@@ -94,7 +94,7 @@ public class BlockFile {
 	Postcondition: TIN returned
 	*/
 	public static TransactionIn getTIN(int blockIndex, int transactionIndex, int TINIndex) {
-		return getTransaction(blockIndex, transactionIndex).getTIN(TINIndex);
+		return getTransaction(blockIndex, transactionIndex).getTIN(TINIndex); //Gets the transaction using getTransaction and then gets the specific TIN
 	}
 	/*
 	Name: getOUT
@@ -103,6 +103,6 @@ public class BlockFile {
 	Postcondition: TOUT returned
 	*/
 	public static TransactionOut getTOUT(int blockIndex, int transactionIndex, int TOUTIndex) {
-		return getTransaction(blockIndex, transactionIndex).getTOUT(TOUTIndex);
+		return getTransaction(blockIndex, transactionIndex).getTOUT(TOUTIndex); //Gets the transaction using getTransaction and then gets the specific TOUT we need
 	}
 }
