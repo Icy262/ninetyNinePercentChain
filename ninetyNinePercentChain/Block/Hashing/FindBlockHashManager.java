@@ -7,6 +7,10 @@ import ninetyNinePercentChain.Block.Transaction;
 import ninetyNinePercentChain.Network.InterNode.Write.NetworkSendManager;
 import ninetyNinePercentChain.Utils.BlockFile;
 
+/*
+ * Manages the FindBlockHash thread. Allows for Transactions to be passed to the class and automatically included in the next block. Completed blocks are automatically sent out across the network and stored in our local blockchain directory
+ */
+
 public class FindBlockHashManager {
 	private static FindBlockHash search; //This is thread that is searching for the nonce that produces a valid block
 	private static Block block; //The block we are currently trying to search for

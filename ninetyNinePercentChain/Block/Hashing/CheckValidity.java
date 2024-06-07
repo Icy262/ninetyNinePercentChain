@@ -13,6 +13,10 @@ import ninetyNinePercentChain.Block.TransactionOut;
 import ninetyNinePercentChain.Utils.BlockFile;
 import ninetyNinePercentChain.Utils.ByteArray;
 
+/*
+ * Contains methods to check if a Block or Transaction is valid. Also contains a method to check if a TOUT has already been checked.
+*/
+
 public class CheckValidity {
 	/*
 	Name: checkBlock

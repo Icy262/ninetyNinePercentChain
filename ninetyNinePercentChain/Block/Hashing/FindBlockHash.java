@@ -3,6 +3,10 @@ import java.nio.ByteBuffer;
 
 import ninetyNinePercentChain.Block.Block;
 
+/*
+ * Hashes the block. Sends it to the FindBlockHashManager once it has been hashed so that the block can be stored and propagated across the network.
+ */
+
 class FindBlockHash extends Thread {
 	Block blockToHash; //The block we are searching for a nonce for
 	int numZeros; //The number of zeros that we are loking for
