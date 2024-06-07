@@ -1,10 +1,13 @@
 package ninetyNinePercentChain.Block.Hashing;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.security.PrivateKey;
 
 import ninetyNinePercentChain.Keys.KeyPairManager;
 
-import java.security.PrivateKey;
+/*
+ * This class lets us easily sign a byte array. It signs the byte array with the DSA algorithm. DSA is a public key-private key algorithm. We use private key signatures to prove that the owner of an address authorized a transaction from that address. We use public key signatures to decrypt these private key signatures so that we can prove their validity.
+ */
 
 public class Sign {
 	/*
