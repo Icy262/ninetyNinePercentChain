@@ -7,6 +7,10 @@ import ninetyNinePercentChain.Network.InterNode.Read.NetworkRead;
 
 import java.io.DataInputStream;
 
+/*
+ * Opens a connection with a node. Reads an int i that represents the number of blocks that will be sent over the network. Tries to read an object from the other node i times. Passes the Blocks to NetworkRead. The purpose of this method is to make sure that we are not missing any blocks. This is especially important when starting a new node, or restarting a node that was off.
+ */
+
 public class SyncChain extends Thread {
 	private String ip; //The IP we should open a connection to
 	/*

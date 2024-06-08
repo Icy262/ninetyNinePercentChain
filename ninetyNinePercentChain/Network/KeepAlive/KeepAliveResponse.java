@@ -1,8 +1,11 @@
 package ninetyNinePercentChain.Network.KeepAlive;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.ObjectOutputStream;
 import java.lang.Thread;
+
+/*
+ * Listens for incoming connections. Accepts and closes these connections. This prevents our ip from being removed from the other node's list of IPs
+ */
 
 public class KeepAliveResponse extends Thread {
 	private int port=9939;
@@ -14,16 +17,13 @@ public class KeepAliveResponse extends Thread {
 	Postcondition: None
 	*/
 	public void run() {
-		try(ServerSocket serverSocket=new ServerSocket(port);) {
-			while(continueRunning) { //While we should continue running,
+		while(continueRunning) { //While we should continue running,
+			try(ServerSocket serverSocket=new ServerSocket(port);) {
 				Socket socket=serverSocket.accept(); //Accepts an incoming connection
-				ObjectOutputStream writer=new ObjectOutputStream(socket.getOutputStream()); //Makes an output stream. This lets us write data to the endpoint, which will prevent them from removing our IP
-				writer.write(0); //Writes arbitrary data
-				writer.close(); //Cleans up the writer so that we don't waste resouces
 				socket.close(); //Closes connection.
+			} catch(Exception e) {
+				System.out.println(e);
 			}
-		} catch(Exception e) {
-			System.out.println(e);
 		}
 	}
 	/*

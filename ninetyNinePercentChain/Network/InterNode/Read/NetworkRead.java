@@ -4,8 +4,13 @@ import ninetyNinePercentChain.Block.Block;
 import ninetyNinePercentChain.Block.Transaction;
 import ninetyNinePercentChain.Block.Hashing.CheckValidity;
 import ninetyNinePercentChain.Block.Hashing.FindBlockHashManager;
+import ninetyNinePercentChain.Network.InterNode.Write.NetworkSendManager;
 import ninetyNinePercentChain.NetworkTransaction.WaitForTransactionManager;
 import ninetyNinePercentChain.Utils.BlockFile;
+
+/*
+ * All NetworkRecieve threads will pass any recieved data here. All recieved data will have the validity checked. Any invalid Transactions or Blocks will be ignored. All valid transactions will be passed to the FindBlockHashManager if we have hashing on, or nothing will be done if hashing is off. All valid blocks will be written to the blockchain directory and propagted across the network. If the node is operating in a non-hashing mode, the WaitForTransactionManager will also be notified of the new block so that it can check if any threads were waiting for this block. 
+ */
 
 public class NetworkRead {
 	private static boolean hashing;
@@ -17,15 +22,18 @@ public class NetworkRead {
 	*/
 	public static void add(Object toAdd) {
 		if(toAdd.getClass()==Transaction.class) { //If the object is a transaction
-			if(CheckValidity.checkTransaction((Transaction) toAdd)&&hashing) { //If we have hashing on and the Transaction is valid,
-				FindBlockHashManager.addTransaction((Transaction) toAdd);  //Pass the transaction to the FindBlockHashManager
-			} //If hashing is off, we just ignore the transaction
+			if(CheckValidity.checkTransaction((Transaction) toAdd)) { //If the Transaction is valid,
+				if(hashing) { //If hashing is on,
+					FindBlockHashManager.addTransaction((Transaction) toAdd);  //Pass the transaction to the FindBlockHashManager
+				} //If hashing is off, we do nothing
+			}
 		} else if(toAdd.getClass()==Block.class) { //If the object is a Block,
 			if(CheckValidity.checkBlock((Block) toAdd)) { //If the block is valid,
 				BlockFile.writeBlock((Block) toAdd); //Write the block to our local copy of the blockchain
 				if(!hashing) { //If we don't have hashing on,
 					WaitForTransactionManager.update((Block) toAdd); //Update the WaitForTransactionManager of a new block
 				}
+				NetworkSendManager.addToQueue(toAdd); //Passes on the new block to the rest of the network
 			}
 		}
 	}

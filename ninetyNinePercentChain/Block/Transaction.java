@@ -13,6 +13,10 @@ import ninetyNinePercentChain.Utils.SHA256Hash;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
+/*
+ * Transaction contains a collection of TransactionIns and TransactionOuts (TINs and TOUTs). Transaction objects are used to define a single transaction. Transactions use merkle roots of the TIN and TOUTs in order to verify that the Transaction has not been modified. In order to make sure that no one has changed a Transaction, the merkle root is signed by each of the TIN private keys. This means that if someone wants to change a transaction, they need to know the private key of every single person who contributed funds to the transaction
+ */
+
 public class Transaction implements Serializable, MerkleTreeable {
 	private TransactionIn[] TIN; //Not in header. All input transactions. Each TIN maps to a TOUT in an old transaction.
 	private TransactionOut[] TOUT; //Not in header. All output transactions. Specifies the amount and future spender.

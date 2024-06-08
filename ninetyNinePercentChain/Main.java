@@ -11,6 +11,10 @@ import ninetyNinePercentChain.Network.KeepAlive.KeepAliveManager;
 import ninetyNinePercentChain.Network.KeepAlive.KeepAliveResponse;
 import ninetyNinePercentChain.Network.InterNode.Write.NetworkSendManager;
 
+/*
+ * Main method. This is run when the code is being run as an independant node. It starts all the necessary threads. When STOP is typed into the console, the program stops it's threads and exits.
+ */
+
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		QueryDNS queryDNS=new QueryDNS(); //Creates a QueryDNS object

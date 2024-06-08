@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.lang.Thread;
 import java.net.ServerSocket;
 
+/*
+ * NetworkRecieveHandler listens for incoming connections. When it recieves one, it accepts and creates a new thread to handle it. NetworkRecieveHandler keeps a list of all running threads so that it can stop them when the program is shutting down
+ */
+
 public class NetworkReceiveHandler extends Thread {
 	private boolean continueRunning=true;
-	ArrayList<NetworkReceive> networkReceiver=new ArrayList<NetworkReceive>();
+	private ArrayList<NetworkReceive> networkReceiver=new ArrayList<NetworkReceive>();
 	/*
 	Name: run
 	Description: Listens on port 9938 for incoming sockets. Whenever we recieve an incoming socket, we open a new socket conection in a new thread to handle it.

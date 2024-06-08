@@ -7,6 +7,10 @@ import ninetyNinePercentChain.Block.Hashing.Sign;
 import ninetyNinePercentChain.Utils.BlockFile;
 import ninetyNinePercentChain.Utils.SHA256Hash;
 
+/*
+ * TransactionIn is used to define where the tokens being transfered by a Transaction should be taken from. It contains a reference to the location of the TOUT it is spending, along with a signature using the private key that coresponds to the public key specified in the TOUT.
+ */
+
 public class TransactionIn implements MerkleTreeable {
 	private int previousOutBlock; //Block number of previous transaction
 	private int previousOutTransaction; //Transaction number of previous transaction

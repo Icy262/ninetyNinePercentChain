@@ -9,6 +9,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.Serializable;
 
+/*
+ * The Block class holds a collection of transactions. Blocks are "chained" together to form a blockchain. Each block's index is one greater than the one before it. Each block has a copy of the previous block's hash in the header. This means that if any change is made to a block, every single block that comes after it would need to be adjusted. Block uses a merkle root of the transaction's hashes in order to prevent any of the transactions from being changed
+ */
+
 public class Block implements Serializable, MerkleTreeable {
 	private int index; //Header. Index number of the block. This lets us find specific blocks, and to tell the order of blocks and transactions
 	private long timestamp; //Header. Time the block was created at

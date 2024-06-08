@@ -1,6 +1,10 @@
 package ninetyNinePercentChain.Utils;
 import java.security.MessageDigest;
 
+/*
+ * Hashes a byte array with SHA256 and returns it. This is used for generating Merkle Trees and other things.
+ */
+
 public class SHA256Hash {
 	/*
 	Name: hash

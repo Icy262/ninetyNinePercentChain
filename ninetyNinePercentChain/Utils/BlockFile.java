@@ -13,6 +13,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.File;
 
+/*
+ * The BlockFile class allows us to easily read and write Blocks to the blockchain directory. It also allows for easy access to Transactions, TransactionIns, and TransactionOuts in the blocks in the blockchain directory. It contains a method to find the number of blocks in the blockchain directory as well as to find if any given block exists.
+ */
+
 public class BlockFile {
 	/*
 	Name: readBlock

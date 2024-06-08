@@ -2,6 +2,10 @@ package ninetyNinePercentChain.Keys;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 
+/*
+ * Creates a new KeyPair. This class is not used often. It is only used when making a new "address". It just generates a random KeyPair and returns it.
+ */
+
 public class NewKeyPair {
 	/*
 	Name: newKeyPair

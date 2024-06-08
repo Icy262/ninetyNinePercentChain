@@ -2,6 +2,10 @@ package ninetyNinePercentChain.Network.InterNode.Read;
 import java.net.Socket;
 import java.io.ObjectInputStream;
 
+/*
+ * Constructor passes a socket connection to the thread. Thread continously reads from the socket and passes the data to NetworkRead
+ */
+
 class NetworkReceive extends Thread {
 	private Socket endpoint;
 	private boolean continueRunning=true;

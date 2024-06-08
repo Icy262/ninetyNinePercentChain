@@ -9,6 +9,10 @@ import ninetyNinePercentChain.Block.TransactionIn;
 import ninetyNinePercentChain.Block.TransactionOut;
 import ninetyNinePercentChain.Utils.BlockFile;
 
+/*
+ * Keeps a list of waiting threads. Every time we get a new block, we check each of the waiting conditions to see if they match the block. If the condition of a waiting thread is met, we notify it.
+ */
+
 public class WaitForTransactionManager {
 	private static ArrayList<WaitForTransaction> waiting=new ArrayList<WaitForTransaction>();
 	/*
@@ -52,7 +56,9 @@ public class WaitForTransactionManager {
 					}
 				}
 				if(sendAddressMet&&recieveAddressMet&&amountMet) { //If sender, reciever, and value are all correct,
-					currentWaiting.notify(); //Wakes the thread up, because the transaction has been recieved
+					synchronized(currentWaiting) { //Allows us to call notify on this thread
+						currentWaiting.notify(); //Wakes the thread up, because the transaction has been recieved
+					}
 				}
 			}
 		}

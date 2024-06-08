@@ -1,5 +1,9 @@
 package ninetyNinePercentChain.NetworkTransaction;
 
+/*
+ * Allows us to specify why a transaction failed.
+ */
+
 class InsuffientFundsException extends Exception {
 	/*
 	Name: InsufficientFunsException

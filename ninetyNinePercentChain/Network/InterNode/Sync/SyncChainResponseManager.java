@@ -1,6 +1,10 @@
 package ninetyNinePercentChain.Network.InterNode.Sync;
 import java.net.ServerSocket;
 
+/*
+ * Listens for incoming requests from other nodes. Creates a new responder thread and passes the connection to it.
+ */
+
 public class SyncChainResponseManager extends Thread {
 	private boolean continueRunning=true; //Controls if the thread should continue running
 	/*

@@ -3,6 +3,10 @@ import java.util.ArrayList;
 
 import ninetyNinePercentChain.Network.NodeIP;
 
+/*
+ * NetworkSendManager holds a list of NetworkSends. This class allows us to make a single function call and have an object to be sent to all other connected nodes. This manager automatically manages the list of NetworkSends so that we will never have connections with IPs not in our list. Any IP in our list will have a NetworkSend connection. When an object is passed to this method, it passes it to all the NetworkSends contained within the list. 
+ */
+
 public class NetworkSendManager {
 	private static ArrayList<NetworkSend> networkSends=new ArrayList<NetworkSend>(); //List of all the connections to other nodes.
 	/*

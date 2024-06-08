@@ -6,6 +6,10 @@ import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
+/*
+ * KeyPairManager is used to store and retrieve KeyPairs. This is necessary so that the KeyPairs that are used to control access to funds will not be lost across restarts. We store our keys in the keys directory. Keys are accessed by a name defined when the key is initially stored. eg. We name a key "Test". The key is written to Test.ser. To access it, KeyPairManager.readKey("Test") would be called.
+ */
+
 public class KeyPairManager {
 	/*
 	Name: readKey

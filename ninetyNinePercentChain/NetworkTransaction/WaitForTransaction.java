@@ -1,5 +1,9 @@
 package ninetyNinePercentChain.NetworkTransaction;
 
+/*
+ * This object defines the conditions that must be met for the thread to stop waiting. It includes sender, reciever, and value of the transaction.
+ */
+
 public class WaitForTransaction {
 	private byte[] sendAddress; //Address sending
 	private byte[] recieveAddress; //Address recieving

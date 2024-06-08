@@ -5,6 +5,10 @@ import java.net.Socket;
 
 import ninetyNinePercentChain.Utils.BlockFile;
 
+/*
+ * SyncChainResponder is designed to respond to a request made by another node through SyncChain. It sends the number of blocks in our blockchain directory and then sends all of the blocks in our directory over the network. This allows us to start up new nodes or update nodes which went offline temporarily.
+ */
+
 class SyncChainResponder extends Thread {
 	private Socket endpoint; //Our connection to the reciever
 	/*

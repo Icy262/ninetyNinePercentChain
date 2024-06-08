@@ -6,6 +6,10 @@ import ninetyNinePercentChain.Network.NodeIP;
 import java.lang.Thread;
 import java.io.ObjectInputStream;
 
+/*
+ * Connects to the DNS server and gets 10 IP addresses from it. It adds these to our list of IPs. It repeats this every 10 minutes while the program is running. If we don't have any IP addresses, we repeat this every 1 second instead, until we get an IP.
+ */
+
 public class QueryDNS extends Thread {
 	private int port=9940;
 	private String DNSIP="10.10.166.222";

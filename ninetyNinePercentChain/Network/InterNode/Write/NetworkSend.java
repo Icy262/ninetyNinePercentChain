@@ -4,6 +4,10 @@ import java.lang.Thread;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/*
+ * Network send creates a connection to another node. When objects are added to the send queue using the addToQueue method, we wake the thread. The run method of the class will remove the object at index 0 in the send queue, sends it over the socket, and wait again.
+ */
+
 class NetworkSend extends Thread {
 	private String ip; //IP that we are supposed to connect to
 	private ArrayList<Object> sendQueue=new ArrayList<Object>(); //List of Objects we are supposed to send
@@ -51,7 +55,9 @@ class NetworkSend extends Thread {
 	*/
 	public void addToQueue(Object toSend) {
 		sendQueue.add(toSend); //Adds the object to the queue
-		notify(); //Wakes the thread so that it will send the object
+		synchronized(this) { //Lets us notify the thread
+			notify(); //Wakes the thread so that it will send the object
+		}
 	}
 	/*
 	Name: stopThread
@@ -61,6 +67,8 @@ class NetworkSend extends Thread {
 	*/
 	public void stopThread() {
 		continueRunning=false; //Sets continue running flag to false
-		notify(); //Breaks out of the wait
+		synchronized(this) { //Lets us notify the thread
+			notify(); //Breaks out of the wait
+		}
 	}
 }

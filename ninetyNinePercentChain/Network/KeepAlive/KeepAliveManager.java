@@ -2,6 +2,10 @@ package ninetyNinePercentChain.Network.KeepAlive;
 
 import ninetyNinePercentChain.Network.NodeIP;
 
+/*
+ * Every five minutes, we go through the list of IPs and make keep alive connections.
+ */
+
 public class KeepAliveManager extends Thread {
 	private boolean continueRunning=true; //Flag to control if the program should continue running
 	/*

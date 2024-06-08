@@ -1,4 +1,9 @@
 package ninetyNinePercentChain.Utils;
+
+/*
+ * Allows us to merge two byte arrays together. This is particularly useful for generating Merkle Trees
+ */
+
 public class ByteArray {
 	/*
 	Name: merge
