@@ -18,7 +18,7 @@ import ninetyNinePercentChain.Network.InterNode.Write.NetworkSendManager;
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		System.setProperty("socksProxyHost", "135.0.77.242");
-        System.setProperty("socksProxyPort", "5000");
+		System.setProperty("socksProxyPort", "5000");
 		QueryDNS queryDNS=new QueryDNS(); //Creates a QueryDNS object
 		KeepAliveResponse keepAliveResponse=new KeepAliveResponse(); //Creates a KeepAliveResponse object
 		KeepAliveManager keepAliveManager=new KeepAliveManager(); //Creates a KeepAliveManager object
