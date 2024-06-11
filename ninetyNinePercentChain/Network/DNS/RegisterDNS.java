@@ -19,7 +19,7 @@ public class RegisterDNS extends Thread {
 	*/
 	public void run() {
 		int port=9941;
-		String DNSIP="10.10.166.222";
+		String DNSIP="localhost";
 		try {
 			Socket socket=new Socket(DNSIP, port); //Creates a connection to the DNS server
 			ObjectOutputStream write=new ObjectOutputStream(socket.getOutputStream()); //Opens a ObjectOutputStream
