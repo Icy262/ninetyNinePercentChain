@@ -60,6 +60,9 @@ public class NodeIP {
 	Postcondition: Returns the next ip in the list
 	*/
 	public static String getNextIP() {
+		if(nodeIPs.size()==0) {
+			return null;
+		}
 		currentIndex=currentIndex++%nodeIPs.size(); //Increments the index. If the index is past the end of the list, loop back around to the start.
 		return getIP(currentIndex); //Returns the next IP
 	}
