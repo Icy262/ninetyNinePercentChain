@@ -21,7 +21,7 @@ public class RegisterDNS extends Thread {
 		try {
 			Socket socket=new Socket(DNSIP, port); //Creates a connection to the DNS server
 			ObjectOutputStream write=new ObjectOutputStream(socket.getOutputStream()); //Opens a ObjectOutputStream
-			write.writeUTF("Socket"/* socket.getLocalAddress().getHostAddress() */); //Writes our IP address in String format to the DNS server
+			write.writeUTF(socket.getLocalAddress().getHostAddress()); //Writes our IP address in String format to the DNS server
 			write.close(); //Closes the ObjectOutputStream to save resources
 			socket.close(); //Close the Socket to save resources
 		} catch (Exception e) {
