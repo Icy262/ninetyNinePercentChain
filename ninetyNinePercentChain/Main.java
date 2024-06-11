@@ -35,7 +35,7 @@ public class Main {
 		boolean stopProgram=false; //Flag. If false, program continues running. If true, program stops.
 		while(!stopProgram) { //While stopProgram is false.
 			System.out.println("Type \"STOP\" to stop the program");
-			if(userInput.nextLine().equalsIgnoreCase("STOP")); { //If user enters "STOP",
+			if(userInput.nextLine().equalsIgnoreCase("STOP")) { //If user enters "STOP",
 				stopProgram=true; //Sets the stopProgram flag to true. This will stop the program
 				userInput.close(); //Closes the Scanner
 				queryDNS.stopThread(); //Stops the queryDNS thread
