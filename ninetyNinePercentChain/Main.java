@@ -3,6 +3,7 @@ package ninetyNinePercentChain;
 import java.util.Scanner;
 import java.lang.InterruptedException;
 
+import ninetyNinePercentChain.Network.NodeIP;
 import ninetyNinePercentChain.Network.DNS.QueryDNS;
 import ninetyNinePercentChain.Network.DNS.RegisterDNS;
 import ninetyNinePercentChain.Network.InterNode.Read.NetworkReceiveHandler;
@@ -17,8 +18,6 @@ import ninetyNinePercentChain.Network.InterNode.Write.NetworkSendManager;
 
 public class Main {
 	public static void main(String[] args) throws InterruptedException {
-		System.setProperty("socksProxyHost", "135.0.77.242");
-		System.setProperty("socksProxyPort", "5000");
 		QueryDNS queryDNS=new QueryDNS(); //Creates a QueryDNS object
 		KeepAliveResponse keepAliveResponse=new KeepAliveResponse(); //Creates a KeepAliveResponse object
 		KeepAliveManager keepAliveManager=new KeepAliveManager(); //Creates a KeepAliveManager object
@@ -35,6 +34,7 @@ public class Main {
 		boolean stopProgram=false; //Flag. If false, program continues running. If true, program stops.
 		while(!stopProgram) { //While stopProgram is false.
 			System.out.println("Type \"STOP\" to stop the program");
+			System.out.println(NodeIP.getNextIP());
 			if(userInput.nextLine().equalsIgnoreCase("STOP")) { //If user enters "STOP",
 				stopProgram=true; //Sets the stopProgram flag to true. This will stop the program
 				userInput.close(); //Closes the Scanner

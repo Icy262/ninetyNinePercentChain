@@ -31,8 +31,10 @@ class NetworkSend extends Thread {
 		try(Socket endpoint=new Socket(ip, 9938)) { //Our connection to the reciever
 			ObjectOutputStream endpointOutputStream=new ObjectOutputStream(endpoint.getOutputStream()); //ObjectOutputStream. Allows us to write the object we are writing.
 			while(continueRunning) { //While we should continue running,
+				synchronized(this) { //Lets us call wait
+					wait(); //Waits. We will get notified whenever a new object is added to the queue
+				}
 				endpointOutputStream.writeObject(sendQueue.remove(0)); //Writes the object we are supposed to write
-				wait(); //Waits. We will get notified whenever a new object is added to the queue
 			}
 		} catch(Exception e) {
 			System.out.println(e);

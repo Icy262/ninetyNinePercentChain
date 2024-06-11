@@ -12,7 +12,7 @@ import java.io.ObjectInputStream;
 
 public class QueryDNS extends Thread {
 	private int port=9940;
-	private String DNSIP="localhost";
+	private String DNSIP="127.98.108.54";
 	private boolean continueThread=true;
 	/*
 	Name: run
