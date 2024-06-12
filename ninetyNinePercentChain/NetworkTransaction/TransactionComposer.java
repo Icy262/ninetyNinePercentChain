@@ -109,4 +109,27 @@ public class TransactionComposer {
 		}
 		return totalValue; //Return the total value of the TIN.
 	}
+	/*
+	Name: findAccountValue
+	Description: Finds the sum of the values of an address
+	Precondition: None
+	Postcondition: Total value of address returned
+	*/
+	public static int findAccountValue(byte[] publicAddress) {
+		int totalValue=0; //Accumulator for value
+		for(int i=BlockFile.getHighestIndex(); i>=0; i--) { //For each Block, (we iterate negatively because this will make spending recent TOUTs faster. There will be a higher concentration of unspent TOUTs towards the most recent blocks)
+			Block block=BlockFile.readBlock(i); //Buffer for the block. Prevents needing to read it multiple times
+			for(int ii=0; ii<block.getNumTransactions(); ii++) { //For each transaction in the block,
+				Transaction transaction=block.getTransaction(ii); //Buffer for the transaction. Prevents needing to get it multiple times.
+				for(int iii=0; i<transaction.getTOUTLength(); iii++) { //For each TOUT in the transaction,
+					if(Arrays.equals(transaction.getTOUT(iii).getNextTransactionPublicKey(), publicAddress)) { //If the TOUT is giving funds to our address,
+						if(!CheckValidity.isTOUTSpent(i, ii, iii)) { //If the TOUT is unspent,
+							totalValue+=transaction.getTOUT(i).getValue(); //Accumulates the value of the TOUT
+						}
+					}
+				}
+			}
+		}
+		return totalValue;
+	}
 }
