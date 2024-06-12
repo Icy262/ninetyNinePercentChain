@@ -4,12 +4,13 @@ import ninetyNinePercentChain.Block.Hashing.MerkleTreeable;
 import ninetyNinePercentChain.Utils.SHA256Hash;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 
 /*
  * TransactionOut defines where the tokens provided by the TransactionIns should be sent. It contains a public key. The spending TIN must be able to sign their transaction with the related private key. The TransactionOut also specifies the value of the TOUT. TOUTs should only be able to be spent once
  */
 
-public class TransactionOut implements MerkleTreeable {
+public class TransactionOut implements MerkleTreeable, Serializable {
 	private byte[] nextTransactionPublicKey; //Public key that corresponds to the private key that the next transaction must be signed with
 	private int value; //Value of transaction
 	/*

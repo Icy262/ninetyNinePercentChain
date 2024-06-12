@@ -1,5 +1,6 @@
 package ninetyNinePercentChain.Block;
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 import java.security.PrivateKey;
 
 import ninetyNinePercentChain.Block.Hashing.MerkleTreeable;
@@ -11,7 +12,7 @@ import ninetyNinePercentChain.Utils.SHA256Hash;
  * TransactionIn is used to define where the tokens being transfered by a Transaction should be taken from. It contains a reference to the location of the TOUT it is spending, along with a signature using the private key that coresponds to the public key specified in the TOUT.
  */
 
-public class TransactionIn implements MerkleTreeable {
+public class TransactionIn implements MerkleTreeable, Serializable {
 	private int previousOutBlock; //Block number of previous transaction
 	private int previousOutTransaction; //Transaction number of previous transaction
 	private int previousOutOutputNumber; //The output number of the previous trasaction
