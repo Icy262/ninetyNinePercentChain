@@ -121,7 +121,7 @@ public class TransactionComposer {
 			Block block=BlockFile.readBlock(i); //Buffer for the block. Prevents needing to read it multiple times
 			for(int ii=0; ii<block.getNumTransactions(); ii++) { //For each transaction in the block,
 				Transaction transaction=block.getTransaction(ii); //Buffer for the transaction. Prevents needing to get it multiple times.
-				for(int iii=0; i<transaction.getTOUTLength(); iii++) { //For each TOUT in the transaction,
+				for(int iii=0; iii<transaction.getTOUTLength(); iii++) { //For each TOUT in the transaction,
 					if(Arrays.equals(transaction.getTOUT(iii).getNextTransactionPublicKey(), publicAddress)) { //If the TOUT is giving funds to our address,
 						if(!CheckValidity.isTOUTSpent(i, ii, iii)) { //If the TOUT is unspent,
 							totalValue+=transaction.getTOUT(i).getValue(); //Accumulates the value of the TOUT
