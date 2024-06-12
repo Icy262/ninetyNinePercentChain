@@ -21,8 +21,9 @@ public class WaitForTransactionManager {
 	Precondition: None
 	Postcondition: WaitForTransaction added to the list of waiting threads
 	*/
-	public static void addWait(WaitForTransaction waiter) {
+	public static WaitForTransaction addWait(WaitForTransaction waiter) {
 		waiting.add(waiter); //Adds the WaitForTransaction to the list of threads waiting for transactions
+		return waiting.get(waiting.size()-1); //Returns it so it is easier to start wait
 	}
 	/*
 	Name: update
