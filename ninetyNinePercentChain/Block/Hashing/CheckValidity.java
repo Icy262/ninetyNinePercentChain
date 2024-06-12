@@ -62,7 +62,7 @@ public class CheckValidity {
 				byte[] encryptedHash=currentTIN.getPrivateKeySignature();
 				TransactionOut TOUT=BlockFile.getTOUT(currentTIN.getPreviousOutBlock(), currentTIN.getPreviousOutTransaction(), currentTIN.getPreviousOutOutputNumber());
 				byte[] publicKeyBytes=TOUT.getNextTransactionPublicKey();
-				PublicKey publicKey=KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(publicKeyBytes));
+				PublicKey publicKey=KeyFactory.getInstance("DSA").generatePublic(new X509EncodedKeySpec(publicKeyBytes));
 				byte[] decryptedHash=Sign.publicKeySign(encryptedHash, publicKey);
 				if(!Arrays.equals(decryptedHash, toCheck.getTIN(i).hash())) { //Compare the hash of the TIN to the decrypted copy of the encrypted hash. The decrypted hash is made by decrypting the encrypted hash with the public key. If it doesn't match the spender was not authorized or the TIN was changed.
 					return false;
@@ -81,7 +81,7 @@ public class CheckValidity {
 				TransactionIn currentTIN=toCheck.getTIN(i);
 				TransactionOut TOUT=BlockFile.getTOUT(currentTIN.getPreviousOutBlock(), currentTIN.getPreviousOutTransaction(), currentTIN.getPreviousOutOutputNumber());
 				byte[] publicKeyBytes=TOUT.getNextTransactionPublicKey();
-				PublicKey publicKey=KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(publicKeyBytes));
+				PublicKey publicKey=KeyFactory.getInstance("DSA").generatePublic(new X509EncodedKeySpec(publicKeyBytes));
 				byte[] signature=Sign.publicKeySign(toCheck.getSignature(i), publicKey);
 				if(!Arrays.equals(toCheck.getMerkleRoot(), signature)) {
 					return false;

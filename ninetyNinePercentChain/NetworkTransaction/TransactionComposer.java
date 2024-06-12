@@ -59,7 +59,7 @@ public class TransactionComposer {
 	*/
 	public static void createTransaction(int value, String keyName, byte[] outKey) throws InsuffientFundsException {
 		try {
-			PublicKey outKeyAsObject=KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(outKey)); //Converts the byte[] encoding of the reciever's public key to a PublicKey object
+			PublicKey outKeyAsObject=KeyFactory.getInstance("DSA").generatePublic(new X509EncodedKeySpec(outKey)); //Converts the byte[] encoding of the reciever's public key to a PublicKey object
 			createTransaction(value, keyName, outKeyAsObject); //Calls the other createTransaction method 
 		} catch(NoSuchAlgorithmException e) {
 			System.out.println(e);
