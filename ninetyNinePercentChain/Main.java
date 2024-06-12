@@ -2,7 +2,6 @@ package ninetyNinePercentChain;
 
 import java.util.Scanner;
 import java.lang.InterruptedException;
-
 import ninetyNinePercentChain.Network.NodeIP;
 import ninetyNinePercentChain.Network.DNS.QueryDNS;
 import ninetyNinePercentChain.Network.DNS.RegisterDNS;
@@ -23,7 +22,7 @@ public class Main {
 		KeepAliveManager keepAliveManager=new KeepAliveManager(); //Creates a KeepAliveManager object
 		NetworkReceiveHandler networkReceiveHandler=new NetworkReceiveHandler(true); //Creates a NetworkRecieveHandler object with hashing flag set to true
 		SyncChainResponseManager syncChainResponseManager=new SyncChainResponseManager(); //Creates a SyncChainResponseManager object
-		
+
 		new RegisterDNS().start(); //Starts the RegisterDNS thread. This will tell the DNS server that we are a node and we are online.
 		queryDNS.start(); //Starts the QueryDNS thread. This will query the DNS server for new IP adresses every 10 minutes or if there was no IPs returned last time, 1 second.
 		keepAliveResponse.start(); //Starts the KeepAliveResponse thread. This will respond to any incoming keep alive requests by starting a new KeepAliveResponse thread.

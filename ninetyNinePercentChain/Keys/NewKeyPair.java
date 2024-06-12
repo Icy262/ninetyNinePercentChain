@@ -15,7 +15,7 @@ public class NewKeyPair {
 	*/
 	public static KeyPair newKeyPair() {
 		try {
-			return KeyPairGenerator.getInstance("DSA").generateKeyPair(); //Generates a new GSA keypair
+			return KeyPairGenerator.getInstance("RSA").generateKeyPair(); //Generates a new GSA keypair
 		} catch(Exception e) {
 			return null;
 		}
